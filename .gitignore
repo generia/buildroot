@@ -13,3 +13,7 @@
 *.rej
 *~
 *.pyc
+# eclipse
+.cproject
+.project
+.settings/
