@@ -265,9 +265,10 @@ long my_getpwnam(const char *name)
 	stream = bb_xfopen(PASSWD_PATH, "r");
 	while(1) {
 		errno = 0;
-		myuser = fgetpwent(stream);
+		myuser = NULL; //fgetpwent(stream);
 		if (myuser == NULL)
-			bb_error_msg_and_die("unknown user name: %s", name);
+			//bb_error_msg_and_die("unknown user name: %s", name);
+			bb_error_msg_and_die("user names are not supported on OSX (user name: %s)", name);
 		if (errno)
 			bb_perror_msg_and_die("fgetpwent");
 		if (!strcmp(name, myuser->pw_name))
@@ -286,9 +287,10 @@ long my_getgrnam(const char *name)
 	stream = bb_xfopen(GROUP_PATH, "r");
 	while(1) {
 		errno = 0;
-		mygroup = fgetgrent(stream);
+		mygroup = NULL; //fgetgrent(stream);
 		if (mygroup == NULL)
-			bb_error_msg_and_die("unknown group name: %s", name);
+			//bb_error_msg_and_die("unknown group name: %s", name);
+			bb_error_msg_and_die("group names are not supported on OSX (group name: %s)", name);
 		if (errno)
 			bb_perror_msg_and_die("fgetgrent");
 		if (!strcmp(name, mygroup->gr_name))
