@@ -121,15 +121,18 @@ COMPILER_VERSION=$($COMPILER -v 2>&1 | sed -n '/^gcc version/p' |
 	sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
 if [ -z "$COMPILER_VERSION" ] ; then
 	echo
-	echo "You must install 'gcc' on your build machine";
-	exit 1;
+	#echo "You must install 'gcc' on your build machine";
+	#exit 1;
+	echo "WARN: You should install 'gcc' on your build machine";
 fi;
-COMPILER_MAJOR=$(echo $COMPILER_VERSION | sed -e "s/\..*//g")
-COMPILER_MINOR=$(echo $COMPILER_VERSION | sed -e "s/^$COMPILER_MAJOR\.//g" -e "s/\..*//g")
-if [ $COMPILER_MAJOR -lt 3 -o $COMPILER_MAJOR -eq 2 -a $COMPILER_MINOR -lt 95 ] ; then
-	echo
-	echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
-	exit 1;
+if [ ! -z "$COMPILER_VERSION" ] ; then
+	COMPILER_MAJOR=$(echo $COMPILER_VERSION | sed -e "s/\..*//g")
+	COMPILER_MINOR=$(echo $COMPILER_VERSION | sed -e "s/^$COMPILER_MAJOR\.//g" -e "s/\..*//g")
+	if [ $COMPILER_MAJOR -lt 3 -o $COMPILER_MAJOR -eq 2 -a $COMPILER_MINOR -lt 95 ] ; then
+		echo
+		echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
+		exit 1;
+	fi;
 fi;
 
 # check for host CXX
