@@ -1,0 +1,43 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "macosx-v3.3.tar.gz" "fakeroot" "host-fakeroot" "add-missing-fakexattr" "\
+        message.h \
+    ";
+
+
+===============================================================================
+--- a/message.h	2012-05-24 11:23:04.000000000 +0200
++++ b/message.h	2018-01-03 18:20:37.000000000 +0100
+@@ -64,6 +64,20 @@
+ #pragma pack()
+ #endif
+ 
++#define MAX_IPC_BUFFER_SIZE 256
++
++#if __SUNPRO_C
++#pragma pack(4)
++#endif
++struct fakexattr {
++	uint32_t   buffersize;
++	char       buf[MAX_IPC_BUFFER_SIZE];
++	int32_t    flags_rc; /* flags from setxattr. Return code on round trip */
++} FAKEROOT_ATTR(packed);
++#if __SUNPRO_C
++#pragma pack()
++#endif
++
+ #if __SUNPRO_C
+ #pragma pack(4)
+ #endif
+@@ -77,6 +91,7 @@
+ 	int serial;
+ #endif
+ 	struct fakestat st;
++	struct fakexattr xattr;
+ 	uint32_t        remote;
+ } FAKEROOT_ATTR(packed);
+ #if __SUNPRO_C

@@ -1,0 +1,23 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "macosx-v3.3.tar.gz" "fakeroot" "host-fakeroot" "disable-openat" "\
+        configure.ac \
+    ";
+
+
+===============================================================================
+--- a/configure.ac	2012-05-24 11:23:04.000000000 +0200
++++ b/configure.ac	2018-01-04 15:51:14.000000000 +0100
+@@ -286,7 +286,7 @@
+   ],[ AC_MSG_RESULT([no])
+   ])
+ 
+-AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod fgetattrlist)
++AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat renameat unlinkat lchmod fgetattrlist)
+ 
+ dnl find out how stat() etc are called. On linux systems, we really
+ dnl need to wrap (IIRC):

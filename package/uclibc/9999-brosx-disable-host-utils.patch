@@ -1,0 +1,26 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "uClibc-ng-1.0.27.tar.xz" "uclibc" "uclibc" "disable-host-utils" "\
+        utils/Makefile.in \
+    ";
+
+
+===============================================================================
+--- a/utils/Makefile.in	2017-11-27 21:07:46.000000000 +0100
++++ b/utils/Makefile.in	2018-01-04 14:02:17.000000000 +0100
+@@ -111,7 +111,10 @@
+ hostutils: $(hostutils_OBJ)
+ 
+ $(hostutils_OBJ): $(utils_OUT)/%.host : $(utils_DIR)/%.c
+-	$(hcompile.u)
++	#$(hcompile.u)
++	echo "brosx: no hostutils on OSX, creating dummy file '$@' as output file ..."
++	echo "#!/bin/bash" > $@
++	echo "echo \"brosx: the uclibc host utils are disabled due to Mach-o object format on OSX.\"" >> $@
+ 
+ 
+ install-y += utils_install

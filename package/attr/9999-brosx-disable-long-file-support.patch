@@ -1,0 +1,49 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "attr-2.4.47.src.tar.gz" "attr" "host-attr" "disable-long-file-support" "\
+        getfattr/getfattr.c \
+        setfattr/setfattr.c \
+    ";
+
+
+===============================================================================
+--- a/getfattr/getfattr.c	2013-05-19 06:53:54.000000000 +0200
++++ b/getfattr/getfattr.c	2018-01-03 17:07:32.000000000 +0100
+@@ -81,13 +81,13 @@
+ int do_getxattr(const char *path, const char *name, void *value, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		getxattr : lgetxattr)(path, name, value, size);
++		getxattr : /*l*/getxattr)(path, name, value, size);
+ }
+ 
+ int do_listxattr(const char *path, char *list, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		listxattr : llistxattr)(path, list, size);
++		listxattr : /*l*/listxattr)(path, list, size);
+ }
+ 
+ const char *strerror_ea(int err)
+===============================================================================
+--- a/setfattr/setfattr.c	2013-05-19 06:53:54.000000000 +0200
++++ b/setfattr/setfattr.c	2018-01-03 17:07:05.000000000 +0100
+@@ -86,12 +86,12 @@
+ int do_setxattr(const char *path, const char *name,
+ 		const void *value, size_t size)
+ {
+-	return (opt_deref ? setxattr : lsetxattr)(path, name, value, size, 0);
++	return (opt_deref ? setxattr : /*l*/setxattr)(path, name, value, size, 0);
+ }
+ 
+ int do_removexattr(const char *path, const char *name)
+ {
+-	return (opt_deref ? removexattr : lremovexattr)(path, name);
++	return (opt_deref ? removexattr : /*l*/removexattr)(path, name);
+ }
+ 
+ int restore(const char *filename)

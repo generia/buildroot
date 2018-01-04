@@ -1,0 +1,25 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "syslinux-6.03.tar.xz" "syslinux" "syslinux" "use-host-tools-for-lzo-libs" "\
+        lzo/Makefile \
+    ";
+
+
+===============================================================================
+--- a/lzo/Makefile	2014-10-06 18:27:44.000000000 +0200
++++ b/lzo/Makefile	2018-01-04 01:34:40.000000000 +0100
+@@ -26,8 +26,8 @@
+ 
+ $(LIB) : $(LIBOBJS)
+ 	rm -f $@
+-	$(AR) cq $@ $^
+-	$(RANLIB) $@
++	$(AR_FOR_BUILD) cq $@ $^
++	$(RANLIB_FOR_BUILD) $@
+ 
+ prepcore : prepcore.o $(LIB)
+ 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)

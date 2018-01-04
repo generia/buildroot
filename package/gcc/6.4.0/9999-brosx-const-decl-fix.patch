@@ -1,0 +1,27 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "gcc-6.4.0.tar.xz" "gcc" "host-gcc-initial" "const-decl-fix" "\
+        libiberty/strerror.c \
+    ";
+
+
+===============================================================================
+--- a/libiberty/strerror.c	2015-01-19 16:28:56.000000000 +0100
++++ b/libiberty/strerror.c	2018-01-03 15:59:43.000000000 +0100
+@@ -471,10 +471,10 @@
+ 
+ 
+ #ifndef sys_nerr
+-extern int sys_nerr;
++extern __const int sys_nerr;
+ #endif
+ #ifndef sys_errlist
+-extern char *sys_errlist[];
++extern __const char *__const sys_errlist[];
+ #endif
+ 
+ #endif

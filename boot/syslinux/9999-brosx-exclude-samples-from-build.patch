@@ -1,0 +1,22 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "syslinux-6.03.tar.xz" "syslinux" "syslinux" "exclude-samples-from-build" "\
+        com32/Makefile \
+    ";
+
+
+===============================================================================
+--- a/com32/Makefile	2014-10-06 18:27:44.000000000 +0200
++++ b/com32/Makefile	2018-01-04 01:35:12.000000000 +0100
+@@ -1,5 +1,6 @@
+ SUBDIRS = libupload tools lib elflink/ldlinux gpllib libutil modules mboot \
+-	  menu samples elflink rosh cmenu hdt gfxboot sysdump lua/src chain
++	  menu elflink rosh cmenu hdt gfxboot sysdump lua/src chain
++#	  menu samples elflink rosh cmenu hdt gfxboot sysdump lua/src chain
+ 
+ .PHONY: subdirs $(SUBDIRS)
+ subdirs: $(SUBDIRS)

@@ -42,5 +42,12 @@ endef
 
 ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
 
+# libtool: -rpath param does not work, copy shared lib manually
+define HOST_ATTR_FIX_LIBTOOL_DYLIB_FILES
+	cp $(HOST_ATTR_SRCDIR)/libattr/.libs/libattr*\.dylib $(HOST_DIR)/lib/
+endef
+HOST_ATTR_POST_INSTALL_HOOKS += HOST_ATTR_FIX_LIBTOOL_DYLIB_FILES
+
+
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))

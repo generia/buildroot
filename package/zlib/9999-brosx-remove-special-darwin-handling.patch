@@ -1,0 +1,34 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "zlib-1.2.11.tar.xz" "zlib" "zlib" "remove-special-darwin-handling" "\
+        configure \
+    ";
+
+
+===============================================================================
+--- a/configure	2016-12-31 19:06:40.000000000 +0100
++++ b/configure	2018-01-04 16:17:56.000000000 +0100
+@@ -241,12 +241,13 @@
+              SHAREDLIBV=libz.$VER$shared_ext
+              SHAREDLIBM=libz.$VER1$shared_ext
+              LDSHARED=${LDSHARED-"$cc -dynamiclib -install_name $libdir/$SHAREDLIBM -compatibility_version $VER1 -current_version $VER3"}
+-             if libtool -V 2>&1 | grep Apple > /dev/null; then
+-                 AR="libtool"
+-             else
+-                 AR="/usr/bin/libtool"
+-             fi
+-             ARFLAGS="-o" ;;
++             #if libtool -V 2>&1 | grep Apple > /dev/null; then
++             #    AR="libtool"
++             #else
++             #    AR="/usr/bin/libtool"
++             #fi
++             #ARFLAGS="-o" 
++             ;;
+   *)             LDSHARED=${LDSHARED-"$cc -shared"} ;;
+   esac
+ else
