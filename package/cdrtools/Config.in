@@ -1,0 +1,14 @@
+config BR2_PACKAGE_CDRTOOLS
+	bool "cdrtools"
+	depends on BR2_USE_MMU # fork
+	# Needed for libbz
+	#select BR2_PACKAGE_BZIP2
+	#select BR2_PACKAGE_LIBCAP
+	#select BR2_PACKAGE_ZLIB
+	help
+	  cdrtools is a highly portable CD/DVD/BluRay 
+	  command line recording software. It's a set 
+	  of command line programs that allows to record 
+	  CD/DVD/BluRay media. 
+	  
+	  http://cdrtools.sourceforge.net/private/cdrecord.html
