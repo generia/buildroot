@@ -1,0 +1,48 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "linux-4.13.16.tar.xz" "linux" "linux" "fix-subarch-include-paths-for-x86" "\
+        arch/x86/entry/vdso/Makefile \
+        scripts/selinux/genheaders/Makefile \
+        scripts/selinux/mdp/Makefile \
+    ";
+
+
+===============================================================================
+--- a/arch/x86/entry/vdso/Makefile	2017-11-24 08:35:59.000000000 +0100
++++ b/arch/x86/entry/vdso/Makefile	2018-01-04 22:42:27.000000000 +0100
+@@ -55,6 +55,7 @@
+ $(obj)/vdso64.so.dbg: $(src)/vdso.lds $(vobjs) FORCE
+ 	$(call if_changed,vdso)
+ 
++SUBARCH=x86
+ HOST_EXTRACFLAGS += -I$(srctree)/tools/include -I$(srctree)/include/uapi -I$(srctree)/arch/$(SUBARCH)/include/uapi
+ hostprogs-y			+= vdso2c
+ 
+===============================================================================
+--- a/scripts/selinux/genheaders/Makefile	2017-11-24 08:35:59.000000000 +0100
++++ b/scripts/selinux/genheaders/Makefile	2018-01-04 22:43:19.000000000 +0100
+@@ -1,5 +1,8 @@
+ hostprogs-y	:= genheaders
++SUBARCH=x86
+ HOST_EXTRACFLAGS += \
++	-I$(srctree)/arch/$(SUBARCH)/include/uapi \
++	-I$(objtree)/arch/$(SUBARCH)/include/generated/uapi \
+ 	-I$(srctree)/include/uapi -I$(srctree)/include \
+ 	-I$(srctree)/security/selinux/include
+ 
+===============================================================================
+--- a/scripts/selinux/mdp/Makefile	2017-11-24 08:35:59.000000000 +0100
++++ b/scripts/selinux/mdp/Makefile	2018-01-04 22:42:58.000000000 +0100
+@@ -1,5 +1,8 @@
+ hostprogs-y	:= mdp
++SUBARCH=x86
+ HOST_EXTRACFLAGS += \
++	-I$(srctree)/arch/$(SUBARCH)/include/uapi \
++	-I$(objtree)/arch/$(SUBARCH)/include/generated/uapi \
+ 	-I$(srctree)/include/uapi -I$(srctree)/include \
+ 	-I$(srctree)/security/selinux/include
+ 

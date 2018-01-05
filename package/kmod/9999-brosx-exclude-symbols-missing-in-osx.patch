@@ -1,0 +1,45 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "kmod-24.tar.xz" "kmod" "host-kmod" "exclude-symbols-missing-in-osx" "\
+        shared/util.c \
+        libkmod/libkmod-module.c \
+    ";
+
+
+===============================================================================
+--- a/shared/util.c	2016-08-10 17:40:50.000000000 +0200
++++ b/shared/util.c	2018-01-04 17:41:22.000000000 +0100
+@@ -365,7 +367,7 @@
+ 	if (path_is_absolute(p))
+ 		return strdup(p);
+ 
+-	cwd = get_current_dir_name();
++	cwd = NULL; // brosx: exclude: cwd = get_current_dir_name();
+ 	if (!cwd)
+ 		return NULL;
+ 
+===============================================================================
+--- a/libkmod/libkmod-module.c	2017-02-16 17:50:01.000000000 +0100
++++ b/libkmod/libkmod-module.c	2018-01-04 17:42:32.000000000 +0100
+@@ -787,7 +787,7 @@
+ 	flags &= KMOD_REMOVE_FORCE;
+ 	flags |= KMOD_REMOVE_NOWAIT;
+ 
+-	err = delete_module(mod->name, flags);
++	err = -ENOENT; // brosx excluded:   delete_module(mod->name, flags);
+ 	if (err != 0) {
+ 		err = -errno;
+ 		ERR(mod->ctx, "could not remove '%s': %m\n", mod->name);
+@@ -879,7 +879,7 @@
+ 	}
+ 	size = kmod_file_get_size(mod->file);
+ 
+-	err = init_module(mem, size, args);
++	err = -ENOENT; // brosx excluded:  init_module(mem, size, args);
+ init_finished:
+ 	if (err < 0) {
+ 		err = -errno;

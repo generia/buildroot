@@ -1,0 +1,31 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "linux-4.13.16.tar.xz" "linux" "linux" "fix-problems-with-empty-sub-regexps" "\
+        arch/x86/tools/relocs.c \
+    ";
+
+
+===============================================================================
+--- a/arch/x86/tools/relocs.c	2017-11-24 08:35:59.000000000 +0100
++++ b/arch/x86/tools/relocs.c	2018-01-04 22:44:02.000000000 +0100
+@@ -54,12 +54,12 @@
+ 	[S_REL] =
+ 	"^(__init_(begin|end)|"
+ 	"__x86_cpu_dev_(start|end)|"
+-	"(__parainstructions|__alt_instructions)(|_end)|"
+-	"(__iommu_table|__apicdrivers|__smp_locks)(|_end)|"
++	"(__parainstructions|__alt_instructions)(.?|_end)|"
++	"(__iommu_table|__apicdrivers|__smp_locks)(.?|_end)|"
+ 	"__(start|end)_pci_.*|"
+ 	"__(start|end)_builtin_fw|"
+-	"__(start|stop)___ksymtab(|_gpl|_unused|_unused_gpl|_gpl_future)|"
+-	"__(start|stop)___kcrctab(|_gpl|_unused|_unused_gpl|_gpl_future)|"
++	"__(start|stop)___ksymtab(.?|_gpl|_unused|_unused_gpl|_gpl_future)|"
++	"__(start|stop)___kcrctab(.?|_gpl|_unused|_unused_gpl|_gpl_future)|"
+ 	"__(start|stop)___param|"
+ 	"__(start|stop)___modver|"
+ 	"__(start|stop)___bug_table|"
