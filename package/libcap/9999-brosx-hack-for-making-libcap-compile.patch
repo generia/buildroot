@@ -1,0 +1,199 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "libcap-2.25.tar.xz" "libcap" "host-libcap" "hack-for-making-libcap-compile" "\
+        libcap/include/sys/capability.h \
+        libcap/include/uapi/linux/capability.h \
+        libcap/cap_alloc.c \
+        libcap/cap_file.c \
+        libcap/cap_proc.c \
+        progs/capsh.c \
+    ";
+
+
+===============================================================================
+--- a/libcap/include/sys/capability.h	2014-03-10 00:26:40.000000000 +0100
++++ b/libcap/include/sys/capability.h	2018-01-05 02:09:45.000000000 +0100
+@@ -21,7 +21,7 @@
+ 
+ #include <sys/types.h>
+ #include <stdint.h>
+-#include <linux/types.h>
++//#include <linux/types.h>
+ 
+ #ifndef __user
+ #define __user
+===============================================================================
+--- a/libcap/include/uapi/linux/capability.h	2016-01-31 02:12:59.000000000 +0100
++++ b/libcap/include/uapi/linux/capability.h	2018-01-05 02:09:45.000000000 +0100
+@@ -13,7 +13,36 @@
+ #ifndef _UAPI_LINUX_CAPABILITY_H
+ #define _UAPI_LINUX_CAPABILITY_H
+ 
+-#include <linux/types.h>
++
++//#include <linux/types.h>
++typedef __signed__ char __s8;
++typedef unsigned char __u8;
++
++typedef __signed__ short __s16;
++typedef unsigned short __u16;
++
++typedef __signed__ int __s32;
++typedef unsigned int __u32;
++
++typedef __signed__ long __s64;
++typedef unsigned long __u64;
++
++#ifdef __CHECKER__
++#define __bitwise__ __attribute__((bitwise))
++#else
++#define __bitwise__
++#endif
++#define __bitwise __bitwise__
++
++typedef __u16 __bitwise __le16;
++typedef __u16 __bitwise __be16;
++typedef __u32 __bitwise __le32;
++typedef __u32 __bitwise __be32;
++typedef __u64 __bitwise __le64;
++typedef __u64 __bitwise __be64;
++
++typedef __u16 __bitwise __sum16;
++typedef __u32 __bitwise __wsum;
+ 
+ struct task_struct;
+ 
+===============================================================================
+--- a/libcap/cap_alloc.c	2013-12-24 18:49:41.000000000 +0100
++++ b/libcap/cap_alloc.c	2018-01-05 02:09:45.000000000 +0100
+@@ -7,6 +7,21 @@
+ 
+ #include "libcap.h"
+ 
++int capget(cap_user_header_t hdrp, cap_user_data_t datap) {
++	// brosx dummy hack
++	return -1;
++}
++
++int capset(cap_user_header_t hdrp, const cap_user_data_t datap) {
++	// brosx dummy hack
++	return -1;
++}
++
++int prctl(int id, cap_value_t cap) {
++	// brosx dummy hack
++	return -1;
++}
++
+ /*
+  * Obtain a blank set of capabilities
+  */
+===============================================================================
+--- a/libcap/cap_file.c	2016-01-31 01:40:37.000000000 +0100
++++ b/libcap/cap_file.c	2018-01-05 02:09:45.000000000 +0100
+@@ -8,7 +8,7 @@
+ #include <byteswap.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+-#include <linux/xattr.h>
++//#include <linux/xattr.h>
+ 
+ /*
+  * We hardcode the prototypes for the Linux system calls here since
+@@ -23,6 +23,60 @@
+ extern int removexattr(const char *, const char *);
+ extern int fremovexattr(int, const char *);
+ 
++
++/*
++ * Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
++ * <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
++ * XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
++ * <linux/xattr.h>.
++ *
++ * In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
++ * the XATTR_NAME_CAPS definition was moved to the kernel-only part of
++ * <linux/xattr.h>. It's only in kernel 3.0 (commit
++ * 1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
++ * fixed to expose XATTR_NAME_CAPS and the related definitions to
++ * userspace.
++ *
++ * In order to cope with kernels < 3.0, we define here the appropriate
++ * values, which we assume haven't changed over history.
++ */
++#ifndef XATTR_CAPS_SUFFIX
++#define XATTR_CAPS_SUFFIX "capability"
++#endif
++#ifndef XATTR_SECURITY_PREFIX
++#define XATTR_SECURITY_PREFIX "security."
++#endif
++#ifndef XATTR_NAME_CAPS
++#define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
++#endif
++
++
++/*
++ * Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
++ * <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
++ * XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
++ * <linux/xattr.h>.
++ *
++ * In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
++ * the XATTR_NAME_CAPS definition was moved to the kernel-only part of
++ * <linux/xattr.h>. It's only in kernel 3.0 (commit
++ * 1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
++ * fixed to expose XATTR_NAME_CAPS and the related definitions to
++ * userspace.
++ *
++ * In order to cope with kernels < 3.0, we define here the appropriate
++ * values, which we assume haven't changed over history.
++ */
++#ifndef XATTR_CAPS_SUFFIX
++#define XATTR_CAPS_SUFFIX "capability"
++#endif
++#ifndef XATTR_SECURITY_PREFIX
++#define XATTR_SECURITY_PREFIX "security."
++#endif
++#ifndef XATTR_NAME_CAPS
++#define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
++#endif
++
+ #include "libcap.h"
+ 
+ #ifdef VFS_CAP_U32
+===============================================================================
+--- a/libcap/cap_proc.c	2013-12-16 05:46:28.000000000 +0100
++++ b/libcap/cap_proc.c	2018-01-05 02:10:38.000000000 +0100
+@@ -4,7 +4,7 @@
+  * This file deals with getting and setting capabilities on processes.
+  */
+ 
+-#include <sys/prctl.h>
++#include <linux/prctl.h>
+ 
+ #include "libcap.h"
+ 
+===============================================================================
+--- a/progs/capsh.c	2013-12-16 05:46:28.000000000 +0100
++++ b/progs/capsh.c	2018-01-05 02:09:45.000000000 +0100
+@@ -12,7 +12,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+-#include <sys/prctl.h>
++#include <linux/prctl.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <pwd.h>
+@@ -22,7 +22,6 @@
+ #include <sys/capability.h>
+ #include <sys/securebits.h>
+ #include <sys/wait.h>
+-#include <sys/prctl.h>
+ 
+ #define MAX_GROUPS       100   /* max number of supplementary groups for user */
+ 
