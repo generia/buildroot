@@ -15,7 +15,7 @@ BROSX_AWK_CMD=/usr/local/Cellar/gawk/4.1.1/bin/gawk
 BROSX_BASH_CMD=/usr/local/Cellar/bash/4.4.12/bin/bash
 BROSX_BC_CMD=/usr/bin/bc
 BROSX_BINUTILS_GHOME=/usr/local/Cellar/binutils/2.29.1/bin
-BROSX_BZIP_CMD=/opt/local/bin/bzip2
+BROSX_BZIP2_HOME=/usr/local/Cellar/bzip2/1.0.6_1/bin
 BROSX_COREUTILS_GHOME=/usr/local/Cellar/coreutils/8.23_1/bin
 BROSX_CPIO_CMD=/usr/bin/cpio
 BROSX_DIFFSTAT_CMD=/usr/local/Cellar/diffstat/1.61/bin/diffstat
@@ -36,6 +36,7 @@ BROSX_PERL_CMD=/opt/local/bin/perl5.22
 BROSX_PYTHON_CMD=/usr/bin/python
 BROSX_RSYNC_CMD=/usr/local/Cellar/rsync/3.1.2/bin/rsync
 BROSX_SED_CMD=/usr/local/Cellar/gnu-sed/4.2.2/bin/gsed
+BROSX_SH_CMD=$BROSX_BASH_CMD
 BROSX_TAR_CMD=/usr/local/Cellar/gnu-tar/1.30/bin/gtar
 BROSX_UNZIP_CMD=/usr/local/Cellar/unzip/6.0_3/bin/unzip 
 BROSX_WGET_CMD=/usr/local/Cellar/wget/1.16.1/bin/wget
@@ -181,8 +182,90 @@ for tool in $cmdToolchain; do
 	installLink $BROSX_TOOLCHAIN_WRAPPER $cmdLink $var
 done
 
-PATH=$BROSX_PATH:$PATH
+PATH=$BROSX_PATH
 
 export TERM LS_COLORS PS1 M4 PATH BROSX_ROOT BROSX_HOME BROSX_TOOLS ${!BROSX_TOOLCHAIN_*}
+
+#
+# patch creation helper
+#
+# usage:
+#    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+#
+function diffPackage() {
+	local tarName=$1
+	local pkgName=$2
+	local outName=$3
+	local patchName=$4
+	local files=$5
+
+	echo "This is brosx 'diffPackage' tool ..."
+	echo "- tarName: '$tarName'"
+	echo "- pkgName: '$pkgName'"
+	echo "- outName: '$outName'"
+	echo "- patchName: '$patchName'"
+	echo "-"
+
+	local brHome=$BROSX_HOME
+	local dlDir=$brHome/dl
+	local tarFile=$dlDir/$tarName
+	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	
+	local workDir=$dlDir/.diffPackage
+	mkdir -p $workDir
+	
+	echo "- extracting tar-file '$tarFile' ..."
+	tar -xf $tarFile -C $workDir
+		
+	local tarDir=$workDir/`ls $workDir`
+	
+	local outDir=$brHome/output/build/$outName-$pkgVersion
+	local srcDir=""
+	local srcPath="board boot fs package"
+	for dir in $srcPath; do
+		if [ -d $brHome/$dir/$pkgName ]; then
+			srcDir=$brHome/$dir/$pkgName
+			break
+		fi
+	done
+	if [ "x$pkgName" == "xlinux" ]; then
+		srcDir=$brHome/$pkgName
+	fi
+	
+	local patchFileName="9999-brosx-$4"
+	local patchFile=$srcDir/$patchFileName.patch
+	if [ -d $srcDir/$pkgVersion ]; then
+		 patchFile=$srcDir/$pkgVersion/$patchFileName.patch
+	fi
+	echo "- diffing folders '$tarDir' -> '$outDir' ..."
+	echo "Patch created by brosx \"diffPackage\" tool" > $patchFile
+	echo "" >> $patchFile
+	echo "usage:" >> $patchFile
+	echo "    diffPackage <tarName> <pkgName> <outName> <patchName> <files>" >> $patchFile
+	echo "" >> $patchFile
+	echo "actual:" >> $patchFile
+	echo "    diffPackage \"$tarName\" \"$pkgName\" \"$outName\" \"$patchName\" \"\\" >> $patchFile
+	for file in $files; do
+	echo "        $file \\" >> $patchFile
+	done
+	echo "    \";" >> $patchFile
+	echo "" >> $patchFile
+	echo "" >> $patchFile
+	for file in $files; do
+		local srcFile=$tarDir/$file
+		local outFile=$outDir/$file
+		
+		echo "- diffing files '$srcFile' -> '$outFile' ..."
+		echo "===============================================================================" >> $patchFile
+		diff -u $srcFile $outFile | sed "s|--- $tarDir|--- a|" | sed "s|+++ $outDir|+++ b|"  >> $patchFile
+	done
+	
+	echo "- reporting diffstats for patch-file '$patchFile' ..."
+	diffstat $patchFile
+	
+	echo "- removing work-directory '$workDir' ..."
+	rm -Rf $workDir
+	echo "done."
+}
 
 echo "brosx environment setup done."

@@ -11,7 +11,7 @@ There is not need to setup up a Linux container like Valgrind, Docker or Virtual
  - wrapping the Xcode toolchain to cope with unknown compiler args
  - providing patches for host packages to make them compile on OSX
   
- Currently, the build creates an ISO system image with [Busybox](https://www.busybox.net) that can start from Qemu or VirtualBox.
+ Currently, the build creates an ISO system image with [Busybox](https://www.busybox.net) that can start from [Qemu](https://www.qemu.org/) or [VirtualBox](https://www.virtualbox.org/).
    
  
 # Prepare Build Environment
@@ -48,10 +48,12 @@ We need the following tools:
 - python
 - rsync
 - sed
+- sh
 - tar
 - unzip
 - wget
 - which
+- xzcat
 
 Most of the tools might be already available on your Mac, but we need the [GNU](https://www.gnu.org/software/software.en.html) based versions to reduce incompatibilities compared with a Linux system.
 You can find them directly on the GNU ftp server at http://ftp.gnu.org/gnu/ or use any package manager to install them on your Mac.
@@ -132,7 +134,8 @@ The build shell environment is now ready to use.
 
 # Build System Image
 
-The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.10.16 with some extensions for iso image generation and some simple target tools, like file or htop. See graph diagram below for involved packages.
+The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.10.16 with some extensions for iso image generation and some simple target tools, like file or htop. See [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) diagram below for involved packages.
+	 ![Busybox Iso Graph Depends](support/brosx/configs/brosx_busybox_iso_defconfig-graph-depends.png)
 
 The test build can be reproduced with the defconfig
 
@@ -142,20 +145,15 @@ Running make will start the full build
  
 	make
 	
-The result will be in 'output/images/rootfs.iso9660'
+The result will be in 'output/images/rootfs.iso9660'. You can run the image directly with [Qemu](https://www.qemu.org/).
 
 	qemu-system-i386 -cdrom output/images/rootfs.iso9660
 	
+You can also rename the image to `*.iso`and lauch it with [VirtualBox](https://www.virtualbox.org/).
+
 The result will look like
 	 ![Busybox Iso Screenshot](support/brosx/configs/brosx_busybox_iso_defconfig-screenshot.png)
-
-The involved packages are visualized via [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) and look as follows:
-	 ![Busybox Iso Graph Depends](support/brosx/configs/brosx_busybox_iso_defconfig-graph-depends.png)
 	
 It was tested on
 - OSX 10.10 Yosemite
 - Xcode 6.4
-
-# Under the Hood
-
-TBD.
