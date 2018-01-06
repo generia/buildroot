@@ -27,7 +27,7 @@ We need the following tools:
 - bash
 - bc
 - binutils
-- #bzip2
+- bzip2
 - coreutils
 - cpio
 - diffstat
