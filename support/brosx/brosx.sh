@@ -125,7 +125,7 @@ function installLink() {
 	fi 
 }
 
-function linkWithoutGnuPrefix() { 
+function linkGnuTool() { 
 	srcDir=$1
 	dstDir=$2
 	envVar=$3
@@ -134,6 +134,7 @@ function linkWithoutGnuPrefix() {
 	for gCmd in `ls`; do  
 		cmd=${gCmd#g}
 		installLink $srcDir/$gCmd $dstDir/$cmd $envVar
+		installLink $srcDir/$gCmd $dstDir/$gCmd $envVar
 	done
 	popd 2>&1 >/dev/null
 }
@@ -164,7 +165,7 @@ for ghome in $cmdGhomes; do
 	eval "ghomePath=\${$var}"
 	dir=$BROSX_TOOLS/${ghome,,}/bin
 	mkdir -p $dir
-	linkWithoutGnuPrefix $ghomePath $dir $var
+	linkGnuTool $ghomePath $dir $var
 	BROSX_PATH=$BROSX_PATH:$dir
 done
 
