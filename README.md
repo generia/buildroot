@@ -82,7 +82,8 @@ After mounting the file system, we can enter the build root folder and clone the
 
 ### Create Clean Shell Environment
 
-Configure the build tools as they are installed on your Mac. There is a template at `utils/brosx.sh` in the repository that was used to run the build that serves as a basis.
+Configure the build tools as they are installed on your Mac. There is a template at [`utils/brosx.sh`](https://github.com/generia/buildroot/blob/osx10/utils/brosx.sh) in the repository that helps to setup the environent. 
+The configuration shown in that template was actually used to run the Busibox build.
 
 	cp /Volumes/brosx/buildroot/utils/brosx.sh /Volumes/brosx
 
@@ -94,6 +95,7 @@ The basic folder variables are
 	BROSX_ROOT=/Volumes/brosx
 	BROSX_HOME=$BROSX_ROOT/buildroot
 	BROSX_TOOLS=$BROSX_ROOT/tools
+	BROSX_TOOLCHAIN=$BROSX_ROOT/toolchain
 
 The tool variables follow four certain patterns that are used by the setup logic.
 
