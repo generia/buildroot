@@ -5,6 +5,7 @@
  * See also https://www.gnu.org/software/gnulib/manual/html_node/Glibc-errno_002eh.html#Glibc-errno_002eh
  */
 #include <string.h>
+#include "stdio.h"
 #include <libbrosx.h>
 
 /* The full and simple forms of the name with which the program was

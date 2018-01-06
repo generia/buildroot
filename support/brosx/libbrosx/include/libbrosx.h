@@ -1,10 +1,6 @@
 #ifndef libbrosx_H
 #define libbrosx_H
 
-#include "stdio.h"
-
-void print_hello ();
-
 extern char *program_invocation_name;
 extern char *program_invocation_short_name;
 void brosx_set_program_invocation(int argc, char *argv[]);
