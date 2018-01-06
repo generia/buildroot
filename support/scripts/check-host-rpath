@@ -13,6 +13,11 @@ main() {
     local hostdir="${2}"
     local file ret
 
+	# HACK: fix find seg-fault on missing folder
+	if [ ! -d "${hostdir}/sbin" ]; then
+		mkdir -p "${hostdir}/sbin"
+	fi
+	
     # Remove duplicate and trailing '/' for proper match
     hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
 

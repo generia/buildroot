@@ -485,6 +485,7 @@ include package/Makefile.in
 # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
 -include $(sort $(wildcard arch/arch.mk.*))
 include support/dependencies/dependencies.mk
+include support/brosx/libbrosx/libbrosx.mk
 
 PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
 

@@ -1,5 +1,7 @@
 menu "Host utilities"
 
+	source "support/brosx/libbrosx/Config.in.host"
+
 	source "package/aespipe/Config.in.host"
 	source "package/android-tools/Config.in.host"
 	source "package/cbootimage/Config.in.host"

@@ -32,6 +32,7 @@ We need the following tools:
 - cpio
 - diffstat
 - diffutils
+- dot
 - file
 - findutils
 - getopt
@@ -82,10 +83,10 @@ After mounting the file system, we can enter the build root folder and clone the
 
 ### Create Clean Shell Environment
 
-Configure the build tools as they are installed on your Mac. There is a template at [`utils/brosx.sh`](https://github.com/generia/buildroot/blob/osx10/utils/brosx.sh) in the repository that helps to setup the environent. 
+Configure the build tools as they are installed on your Mac. There is a template at [`support/brosx/brosx.sh`](https://github.com/generia/buildroot/blob/osx10/support/brosx/brosx.sh) in the repository that helps to setup the environent. 
 The configuration shown in that template was actually used to run the Busibox build.
 
-	cp /Volumes/brosx/buildroot/utils/brosx.sh /Volumes/brosx
+	cp /Volumes/brosx/buildroot/support/brosx/brosx.sh /Volumes/brosx
 
 The shell setup template is split into three parts. The first part defines basic folder variables. The second defines all variables that refer to the necessary tools installed on your Mac. 
 These tools have been installed as described before. The second part contains some helper logic that configures the PATH and sets up links that the tools can be found properly.
@@ -107,7 +108,7 @@ The tool variables follow four certain patterns that are used by the setup logic
 1. The first pattern defines single executables that reside somewhere on your Mac. The setup logic will create a link to each of them under `BROSX_TOOLS`.
 2. The second pattern defines a folder that contains only executables forming a tool-set. The setup logic will add this folder to the `PATH`.
 3. The third pattern defines a folder that contains gnu-tools that are installed with a "g" prefix. Since this is convention is not used in a Linux envirnment we strip the "g" prefix and link the base tool name in a folder under `$BROSX_ROOT/opt/<tool-set>/bin`. The tool-set folder with those links will be added to the `PATH`.   
-4. The forth pattern configures the toolchain wrapper that is used to filter the calls to the Xcode toolchain. The setup logic links all tool to a single `toolchain-wrapper-xcode.sh`. 
+4. The forth pattern configures the toolchain wrapper that is used to filter the calls to the Xcode toolchain. The setup logic links all tool to a single [`toolchain-wrapper-xcode.sh`](https://github.com/generia/buildroot/blob/osx10/support/brosx/toolchain-wrapper-xcode.sh). 
 This wrapper determines the link target via the variable value. Before calling the actual compiler tool the arguments are parsed to filter out arguments not known to Xcode.
 
 To aid debugging the toolchain wrapper supports logging. The logging can be turned on/off by defining a log file.

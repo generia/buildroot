@@ -1,0 +1,5 @@
+config BR2_PACKAGE_LIBBROSX
+	bool "libbrosx"
+	#depends on BR2_USE_MMU # fork
+	help
+	  Simple glue library filling up things from glibc missing in Xcode/clang. 

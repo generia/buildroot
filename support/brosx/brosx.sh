@@ -20,6 +20,7 @@ BROSX_COREUTILS_GHOME=/usr/local/Cellar/coreutils/8.23_1/bin
 BROSX_CPIO_CMD=/usr/bin/cpio
 BROSX_DIFFSTAT_CMD=/usr/local/Cellar/diffstat/1.61/bin/diffstat
 BROSX_DIFFUTILS_HOME=/usr/local/Cellar/diffutils/3.6/bin
+BROSX_DOT_CMD=/usr/local/bin/dot
 BROSX_FILE_CMD=/usr/bin/file
 BROSX_FINDUTILS_GHOME=/usr/local/Cellar/findutils/4.6.0/bin
 BROSX_GETOPT_CMD=/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt
@@ -64,7 +65,7 @@ BROSX_TOOLCHAIN_CMD_READELF=/usr/bin/readelf
 BROSX_TOOLCHAIN_CMD_XCRUN=/usr/bin/xcrun 
 
 # toolchain wrapper logging
-BROSX_TOOLCHAIN_WRAPPER_LOG_DIR=$BROSX_HOME/ouput/build
+BROSX_TOOLCHAIN_WRAPPER_LOG_DIR=$BROSX_HOME/output/build
 # leave log-file empty to turn logging off
 #BROSX_TOOLCHAIN_WRAPPER_LOG_FILE=
 BROSX_TOOLCHAIN_WRAPPER_LOG_FILE=$BROSX_TOOLCHAIN_WRAPPER_LOG_DIR/.toolchain-wrapper-xcode.log
@@ -119,7 +120,7 @@ function installLink() {
 	envVar=$3
 	if [ ! -e $cmdLink ]; then 		
 		echo "- installing $envVar: link '$cmdLink' -> '$cmdPath'";
-		ln -s $cmdPath $cmdLink;
+		ln -s -f $cmdPath $cmdLink;
 	fi 
 }
 
@@ -169,7 +170,7 @@ done
 
 # setup toolchain wrapper and link toolchain commands
 BROSX_PATH=$BROSX_TOOLCHAIN/bin:$BROSX_PATH
-BROSX_TOOLCHAIN_WRAPPER=$BROSX_HOME/toolchain/toolchain-wrapper-xcode.sh
+BROSX_TOOLCHAIN_WRAPPER=$BROSX_HOME/support/brosx/toolchain-wrapper-xcode.sh
 mkdir -p $BROSX_TOOLCHAIN/bin
 mkdir -p $BROSX_TOOLCHAIN_WRAPPER_LOG_DIR
 for tool in $cmdToolchain; do

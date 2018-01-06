@@ -58,7 +58,12 @@ if [ "x$cmd" == "xcpp" ]; then
 fi
 
 # check if special brosx flags are needed
-if [ "$isCompiler" == "yes" ]; then
+isLibbrosxInstalled=no
+if [ -f $hostDir/include/libbrosx.h ]; then
+	isLibbrosxInstalled=yes
+fi
+
+if [ "$isCompiler" == "yes" ] && [ "$isLibbrosxInstalled" == "yes" ]; then
 	needsBrOsxCFlags=no
 	needsBrOsxLdFlags=no
 
@@ -81,12 +86,12 @@ if [ "$isCompiler" == "yes" ]; then
 	done
 fi
 
-if [ "$needsBrOsxCFlags" == "xyes" ]; then
+if [ "$needsBrOsxCFlags" == "yes" ]; then
 	addarg "-include"
 	addarg "$hostDir/include/libbrosx.h"
 fi
 
-if [ "$needsBrOsxLdFlags" == "xyes" ]; then	
+if [ "$needsBrOsxLdFlags" == "yes" ]; then	
 	addarg "-L$hostDir/lib"
 	addarg "-lbrosx"
 fi
