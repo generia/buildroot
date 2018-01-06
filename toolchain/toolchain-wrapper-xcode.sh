@@ -21,10 +21,9 @@ error() {
 
 tcName="xcode"
 mappedCmd=$cmd
-tool=`echo $cmd | sed "s/++/xx/"`
-var=BROSX_TOOLCHAIN_CMD_${tool^^}
+var=BROSX_TOOLCHAIN_CMD_${cmd^^}
+var=`echo $var | sed "s/\+\+/xx/"`
 eval "mappedCmd=\${$var}"
-echo "tcw: $cmd - $tool - $var -> $mappedCmd, log: $logFile - $BROSX_TOOLCHAIN_WRAPPER_LOG_FILE."
 if [ "x$mappedCmd" == "x" ]; then 
 	error "can't find mapped command for '$cmd', exiting ..."
 fi

@@ -116,7 +116,7 @@ function installLink() {
 	cmdLink=$2
 	envVar=$3
 	if [ ! -e $cmdLink ]; then 		
-		echo "- installing $envVar: link '$cmdPath' -> '$cmdLink'";
+		echo "- installing $envVar: link '$cmdLink' -> '$cmdPath'";
 		ln -s $cmdPath $cmdLink;
 	fi 
 }

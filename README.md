@@ -84,7 +84,7 @@ After mounting the file system, we can enter the build root folder and clone the
 
 Configure the build tools as they are installed on your Mac. There is a template at `utils/brosx.sh` in the repository that was used to run the build that serves as a basis.
 
-	cp /Volumes/brosx/opt/buildroot/utils/brosx.sh /Volumes/brosx
+	cp /Volumes/brosx/buildroot/utils/brosx.sh /Volumes/brosx
 
 The shell setup template is split into three parts. The first part defines basic folder variables. The second defines all variables that refer to the necessary tools installed on your Mac. 
 These tools have been installed as described before. The second part contains some helper logic that configures the PATH and sets up links that the tools can be found properly.
