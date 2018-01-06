@@ -1,5 +1,5 @@
 config BR2_PACKAGE_CDRTOOLS
-	bool "cdrtools"
+	bool "host cdrtools"
 	depends on BR2_USE_MMU # fork
 	# Needed for libbz
 	#select BR2_PACKAGE_BZIP2

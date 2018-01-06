@@ -132,7 +132,29 @@ The build shell environment is now ready to use.
 
 # Build System Image
 
-TBD.
+The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.10.16 with some extensions for iso image generation and some simple target tools, like file or htop. See graph diagram below for involved packages.
+
+The test build can be reproduced with the defconfig
+
+	make defconfig BR2_DEFCONFIG=support/brosx/configs/brosx_busybox_iso_defconfig
+	 
+Running make will start the full build
+ 
+	make
+	
+The result will be in 'output/images/rootfs.iso9660'
+
+	qemu-system-i386 -cdrom output/images/rootfs.iso9660
+	
+The result will look like
+	 ![Busybox Iso Screenshot](support/brosx/configs/brosx_busybox_iso_defconfig-screenshot.png)
+
+The involved packages are visualized via [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) and look as follows:
+	 ![Busybox Iso Graph Depends](support/brosx/configs/brosx_busybox_iso_defconfig-graph-depends.png)
+	
+It was tested on
+- OSX 10.10 Yosemite
+- Xcode 6.4
 
 # Under the Hood
 
