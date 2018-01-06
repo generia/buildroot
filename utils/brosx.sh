@@ -63,6 +63,7 @@ BROSX_TOOLCHAIN_CMD_OBJDUMP=/usr/bin/objdump
 BROSX_TOOLCHAIN_CMD_READELF=/usr/bin/readelf 
 BROSX_TOOLCHAIN_CMD_XCRUN=/usr/bin/xcrun 
 
+# toolchain wrapper logging
 BROSX_TOOLCHAIN_WRAPPER_LOG_DIR=$BROSX_HOME/ouput/build
 # leave log-file empty to turn logging off
 #BROSX_TOOLCHAIN_WRAPPER_LOG_FILE=
@@ -82,7 +83,7 @@ alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alF'
 
-
+# parse variable pattern types
 cmds=""
 cmdHomes=""
 cmdHGhomes=""
@@ -111,6 +112,7 @@ for var in ${!BROSX_*}; do
 	fi
 done 
 
+# helper functions
 function installLink() { 
 	cmdPath=$1
 	cmdLink=$2
@@ -134,6 +136,7 @@ function linkWithoutGnuPrefix() {
 	popd 2>&1 >/dev/null
 }
 
+# setup logic for tools and tool-sets
 BROSX_TOOLS_BIN=$BROSX_TOOLS/bin
 BROSX_PATH=$BROSX_TOOLS_BIN
 
@@ -165,7 +168,6 @@ done
 
 
 # setup toolchain wrapper and link toolchain commands
-
 BROSX_PATH=$BROSX_TOOLCHAIN/bin:$BROSX_PATH
 BROSX_TOOLCHAIN_WRAPPER=$BROSX_HOME/toolchain/toolchain-wrapper-xcode.sh
 mkdir -p $BROSX_TOOLCHAIN/bin
