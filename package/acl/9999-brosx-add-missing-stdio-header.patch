@@ -1,0 +1,30 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "acl-2.2.52.src.tar.gz" "acl" "host-acl" "add-missing-stdio-header" "\
+        include/misc.h \
+    ";
+
+
+===============================================================================
+--- a/include/misc.h	2013-04-30 17:07:09.000000000 +0200
++++ b/include/misc.h	2018-01-06 17:11:34.000000000 +0100
+@@ -14,10 +14,11 @@
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
++#include <stdio.h>
+ 
+-extern int high_water_alloc(void **buf, size_t *bufsize, size_t newsize);
++extern int __acl_high_water_alloc(void **buf, size_t *bufsize, size_t newsize);
+ 
+-extern const char *quote(const char *str, const char *quote_chars);
+-extern char *unquote(char *str);
++extern const char *__acl_quote(const char *str, const char *quote_chars);
++extern char *__acl_unquote(char *str);
+ 
+-extern char *next_line(FILE *file);
++extern char *__acl_next_line(FILE *file);
