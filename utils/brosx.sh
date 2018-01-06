@@ -167,8 +167,7 @@ done
 # setup toolchain wrapper and link toolchain commands
 
 BROSX_PATH=$BROSX_TOOLCHAIN/bin:$BROSX_PATH
-#BROSX_TOOLCHAIN_WRAPPER=$BROSX_HOME/toolchain/toolchain-wrapper-xcode.sh
-BROSX_TOOLCHAIN_WRAPPER=/Volumes/buildroot/opt/buildroot/toolchain/toolchain-wrapper-xcode.sh
+BROSX_TOOLCHAIN_WRAPPER=$BROSX_HOME/toolchain/toolchain-wrapper-xcode.sh
 mkdir -p $BROSX_TOOLCHAIN/bin
 mkdir -p $BROSX_TOOLCHAIN_WRAPPER_LOG_DIR
 for tool in $cmdToolchain; do
