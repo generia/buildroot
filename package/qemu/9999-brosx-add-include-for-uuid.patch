@@ -10,3 +10,13 @@ actual:
 
 
 ===============================================================================
+--- a/ui/cocoa.m	2017-12-18 17:15:43.000000000 +0100
++++ b/ui/cocoa.m	2018-01-07 20:32:07.000000000 +0100
+@@ -24,6 +24,7 @@
+ 
+ #include "qemu/osdep.h"
+ 
++#include </usr/include/uuid/uuid.h>
+ #import <Cocoa/Cocoa.h>
+ #include <crt_externs.h>
+ 
