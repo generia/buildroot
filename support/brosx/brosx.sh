@@ -11,45 +11,49 @@ BROSX_TOOLCHAIN=$BROSX_ROOT/toolchain
 # tool-commands (*_CMD), tool-sets (*_HOME) and gnu-prefixed tool-sets (*_GHOME)
 BROSX_AUTOCONF_HOME=/usr/local/Cellar/autoconf/2.69/bin
 BROSX_AUTOMAKE_HOME=/usr/local/Cellar/automake/1.15.1/bin
-BROSX_AWK_CMD=/usr/local/Cellar/gawk/4.1.1/bin/gawk
-BROSX_BASH_CMD=/usr/local/Cellar/bash/4.4.12/bin/bash
-BROSX_BC_CMD=/usr/bin/bc
+BROSX_awk_CMD=/usr/local/Cellar/gawk/4.1.1/bin/gawk
+BROSX_bash_CMD=/usr/local/Cellar/bash/4.4.12/bin/bash
+BROSX_bc_CMD=/usr/bin/bc
 BROSX_BINUTILS_GHOME=/usr/local/Cellar/binutils/2.29.1/bin
 BROSX_BZIP2_HOME=/usr/local/Cellar/bzip2/1.0.6_1/bin
 BROSX_COREUTILS_GHOME=/usr/local/Cellar/coreutils/8.23_1/bin
-BROSX_CPIO_CMD=/usr/bin/cpio
-BROSX_DIFFSTAT_CMD=/usr/local/Cellar/diffstat/1.61/bin/diffstat
+BROSX_cpio_CMD=/usr/bin/cpio
+BROSX_diffstat_CMD=/usr/local/Cellar/diffstat/1.61/bin/diffstat
 BROSX_DIFFUTILS_HOME=/usr/local/Cellar/diffutils/3.6/bin
-BROSX_DOT_CMD=/usr/local/bin/dot
-BROSX_FILE_CMD=/usr/bin/file
+BROSX_dot_CMD=/usr/local/bin/dot
+BROSX_file_CMD=/usr/bin/file
 BROSX_FINDUTILS_GHOME=/usr/local/Cellar/findutils/4.6.0/bin
-BROSX_GETOPT_CMD=/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt
-BROSX_GETCONF_CMD=/usr/bin/getconf
-BROSX_GIT_CMD=/usr/local/Cellar/git/2.15.1_1/bin/git
+BROSX_getopt_CMD=/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt
+BROSX_getconf_CMD=/usr/bin/getconf
+BROSX_git_CMD=/usr/local/Cellar/git/2.15.1_1/bin/git
 BROSX_GREP_HOME=/usr/local/Cellar/grep/2.21/bin
-BROSX_GZIP_CMD=/usr/bin/gzip
+BROSX_gzip_CMD=/usr/bin/gzip
 BROSX_LIBTOOL_GHOME=/usr/local/Cellar/libtool/2.4.6_1/bin
-BROSX_GLIBTOOLIZE_CMD=$BROSX_LIBTOOL_GHOME/glibtoolize # needed by fakeroot
-BROSX_M4_CMD=$BROSX_HOME/output/host/bin/m4
-BROSX_MAKE_CMD=/opt/local/bin/gmake
-BROSX_PATCH_CMD=/usr/local/Cellar/gpatch/2.7.5/bin/patch
-BROSX_PERL_CMD=/opt/local/bin/perl5.22
-BROSX_PYTHON_CMD=/usr/bin/python
-BROSX_RSYNC_CMD=/usr/local/Cellar/rsync/3.1.2/bin/rsync
-BROSX_SED_CMD=/usr/local/Cellar/gnu-sed/4.2.2/bin/gsed
-BROSX_SH_CMD=$BROSX_BASH_CMD
-BROSX_TAR_CMD=/usr/local/Cellar/gnu-tar/1.30/bin/gtar
-BROSX_UNZIP_CMD=/usr/local/Cellar/unzip/6.0_3/bin/unzip 
-BROSX_WGET_CMD=/usr/local/Cellar/wget/1.16.1/bin/wget
-BROSX_WHICH_CMD=/usr/bin/which
+BROSX_glibtoolize_CMD=$BROSX_LIBTOOL_GHOME/glibtoolize # needed by fakeroot
+BROSX_m4_CMD=$BROSX_HOME/output/host/bin/m4
+BROSX_make_CMD=/opt/local/bin/gmake
+BROSX_patch_CMD=/usr/local/Cellar/gpatch/2.7.5/bin/patch
+BROSX_perl_CMD=/opt/local/bin/perl5.22
+BROSX_python_CMD=/usr/bin/python
+BROSX_rsync_CMD=/usr/local/Cellar/rsync/3.1.2/bin/rsync
+BROSX_sed_CMD=/usr/local/Cellar/gnu-sed/4.2.2/bin/gsed
+BROSX_sh_CMD=$BROSX_bash_CMD
+BROSX_tar_CMD=/usr/local/Cellar/gnu-tar/1.30/bin/gtar
+BROSX_unzip_CMD=/usr/local/Cellar/unzip/6.0_3/bin/unzip 
+BROSX_wget_CMD=/usr/local/Cellar/wget/1.16.1/bin/wget
+BROSX_which_CMD=/usr/bin/which
 
 # convenience commands not strictly needed in the build
-BROSX_LESS_CMD=/usr/bin/less
-BROSX_SSH_CMD=/usr/bin/ssh
-BROSX_VI_CMD=/usr/bin/vi
+BROSX_less_CMD=/usr/bin/less
+BROSX_ssh_CMD=/usr/bin/ssh
+BROSX_vi_CMD=/usr/bin/vi
 
 # qemu
-BROSX_SYSCTL_CMD=/usr/sbin/sysctl
+BROSX_sysctl_CMD=/usr/sbin/sysctl
+
+# host-e2fsprogs
+BROSX_Makeinfo_CMD=/opt/local/bin/Makeinfo 
+BROSX_texi2dvi_CMD=/opt/local/bin/texi2dvi
 
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
@@ -153,7 +157,7 @@ mkdir -p $BROSX_TOOLS_BIN
 for cmd in $cmds; do
 	var=BROSX_${cmd}_CMD
 	eval "cmdPath=\${$var}"
-	cmdLink=$BROSX_TOOLS_BIN/${cmd,,}
+	cmdLink=$BROSX_TOOLS_BIN/${cmd}
 	installLink $cmdPath $cmdLink $var
 done
 
