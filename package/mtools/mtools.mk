@@ -28,6 +28,9 @@ MTOOLS_DEPENDENCIES += libiconv
 MTOOLS_CONF_ENV += LIBS=-liconv
 endif
 
+HOST_MTOOLS_DEPENDENCIES += host-libiconv
+HOST_MTOOLS_CONF_ENV += LIBS=-liconv
+
 # Package does not build in parallel due to improper make rules
 MTOOLS_MAKE = $(MAKE1)
 

@@ -1,0 +1,25 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "mtools-4.0.18.tar.bz2" "mtools" "host-mtools" "use-dummy-unused-macros-for-osx" "\
+        sysincludes.h \
+    ";
+
+
+===============================================================================
+--- a/sysincludes.h	2013-01-07 23:45:56.000000000 +0100
++++ b/sysincludes.h	2018-01-07 23:19:37.000000000 +0100
+@@ -97,8 +97,8 @@
+ /*                                                                     */
+ /***********************************************************************/
+ 
+-
+-#if defined __GNUC__ && defined __STDC__
++#define NEVER 0
++#if defined __GNUC__ && defined __STDC__ && NEVER == 1
+ /* gcc -traditional doesn't have PACKED, UNUSED and NORETURN */
+ # define PACKED __attribute__ ((packed))
+ # if __GNUC__ == 2 && __GNUC_MINOR__ > 6 || __GNUC__ >= 3

@@ -19,6 +19,7 @@ endef
 LIBICONV_PRE_CONFIGURE_HOOKS += LIBICONV_DISABLE_PRELOAD
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))
 
 # Configurations where the toolchain supports locales and the libiconv
 # package is enabled are incorrect, because the toolchain already
