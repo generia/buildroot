@@ -26,9 +26,10 @@ BROSX_FINDUTILS_GHOME=/usr/local/Cellar/findutils/4.6.0/bin
 BROSX_GETOPT_CMD=/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt
 BROSX_GETCONF_CMD=/usr/bin/getconf
 BROSX_GIT_CMD=/usr/local/Cellar/git/2.15.1_1/bin/git
-BROSX_GREP_CMD=/usr/local/Cellar/grep/2.21/bin/grep
+BROSX_GREP_HOME=/usr/local/Cellar/grep/2.21/bin
 BROSX_GZIP_CMD=/usr/bin/gzip
 BROSX_LIBTOOL_GHOME=/usr/local/Cellar/libtool/2.4.6_1/bin
+BROSX_GLIBTOOLIZE_CMD=$BROSX_LIBTOOL_GHOME/glibtoolize # needed by fakeroot
 BROSX_M4_CMD=$BROSX_HOME/output/host/bin/m4
 BROSX_MAKE_CMD=/opt/local/bin/gmake
 BROSX_PATCH_CMD=/usr/local/Cellar/gpatch/2.7.5/bin/patch
@@ -134,7 +135,6 @@ function linkGnuTool() {
 	for gCmd in `ls`; do  
 		cmd=${gCmd#g}
 		installLink $srcDir/$gCmd $dstDir/$cmd $envVar
-		installLink $srcDir/$gCmd $dstDir/$gCmd $envVar
 	done
 	popd 2>&1 >/dev/null
 }

@@ -21,7 +21,7 @@ define HOST_CDRTOOLS_INSTALL_CMDS
 	# install mkisofs only
 	$(HOST_MAKE_ENV) $(HOST_CDRTOOLS_MAKE_ENV) $(MAKE) INS_BASE=$(HOST_DIR) install -C $(HOST_CDRTOOLS_SRCDIR)mkisofs
 	# link to genisoimage
-	ln -s $(HOST_DIR)/bin/mkisofs $(HOST_DIR)/bin/genisoimage
+	ln -s -f $(HOST_DIR)/bin/mkisofs $(HOST_DIR)/bin/genisoimage
 endef
 
 CDRTOOLS_LICENSE = GPL-2.0
