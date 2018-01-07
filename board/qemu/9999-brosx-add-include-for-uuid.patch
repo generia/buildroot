@@ -1,0 +1,22 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "qemu-2.10.2.tar.xz" "qemu" "host-qemu" "add-include-for-uuid" "\
+        ui/cocoa.m \
+    ";
+
+
+===============================================================================
+--- a/ui/cocoa.m	2017-12-18 17:15:43.000000000 +0100
++++ b/ui/cocoa.m	2018-01-07 16:12:33.000000000 +0100
+@@ -24,6 +24,7 @@
+ 
+ #include "qemu/osdep.h"
+ 
++#include </usr/include/uuid/uuid.h>
+ #import <Cocoa/Cocoa.h>
+ #include <crt_externs.h>
+ 
