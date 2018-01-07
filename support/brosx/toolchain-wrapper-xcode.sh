@@ -21,15 +21,15 @@ error() {
 
 tcName="xcode"
 mappedCmd=$cmd
-var=BROSX_TOOLCHAIN_CMD_${cmd^^}
+var=BROSX_TOOLCHAIN_CMD_${cmd}
 var=`echo $var | sed "s/\+\+/xx/"`
 eval "mappedCmd=\${$var}"
+
 if [ "x$mappedCmd" == "x" ]; then 
 	error "can't find mapped command for '$cmd', exiting ..."
 fi
 
 info "running '$cmd' => '$mappedCmd' ..."
-
 
 cmdline=($mappedCmd)
 logline=($mappedCmd)
@@ -52,6 +52,11 @@ function addarg() {
 }
 
 
+# check for Xcode utilties
+if [ "x$cmd" == "xRez" ] || [ "x$cmd" == "xSetFile" ]; then
+	addarg "$cmd"
+fi
+
 # check if c pre processor is needed
 if [ "x$cmd" == "xcpp" ]; then
 	addarg "-E"
@@ -66,7 +71,8 @@ fi
 if [ "$isCompiler" == "yes" ] && [ "$isLibbrosxInstalled" == "yes" ]; then
 	needsBrOsxCFlags=no
 	needsBrOsxLdFlags=no
-
+	hasAsmSource=no
+	hasCSource=no
 	for i in ${!args[@]};  do
 		arg="${args[$i]}"
 		# dont mess with autoconf calls
@@ -83,7 +89,19 @@ if [ "$isCompiler" == "yes" ] && [ "$isLibbrosxInstalled" == "yes" ]; then
 		if [[ $arg =~ ^(-L|-Wl,).*$ ]] ; then
 			needsBrOsxLdFlags=yes
 		fi
+		if [[ $arg =~ ^.*\.S$ ]]; then
+			hasAsmSource=yes
+		fi  
+		if [[ $arg =~ ^.*\.c$ ]]; then
+			hasCSource=yes
+		fi  
 	done
+	
+	# turn brosx lib off for assembler only compiles
+	if [ $hasAsmSource == yes ] && [ $hasCSource == no ]; then
+		needsBrOsxCFlags=no
+		needsBrOsxLdFlags=no
+	fi
 fi
 
 if [ "$needsBrOsxCFlags" == "yes" ]; then
@@ -105,7 +123,8 @@ for i in ${!args[@]};  do
 		if [[ $arg =~ ^-Wl,--version-script.*$ ]] || \
 		   [[ $arg =~ ^-Wl,-soname.*$ ]] || \
 		   [ "x$arg" == "x-Wl,libbz2.so.1.0" ] || \
-		   [ "x$arg" == "x-Wl,--hash-style=both" ]; then
+		   [ "x$arg" == "x-Wl,--hash-style=both" ] || \
+		   [ "x$arg" == "x-Wl,--enable-new-dtags" ]; then
 			info "--- skipping unsupported arg '$arg'"
 			continue
 		fi

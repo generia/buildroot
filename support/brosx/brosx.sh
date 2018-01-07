@@ -48,23 +48,28 @@ BROSX_LESS_CMD=/usr/bin/less
 BROSX_SSH_CMD=/usr/bin/ssh
 BROSX_VI_CMD=/usr/bin/vi
 
+# qemu
+BROSX_SYSCTL_CMD=/usr/sbin/sysctl
+
 # host toolchain
-BROSX_TOOLCHAIN_CMD_CC=/usr/bin/cc
-BROSX_TOOLCHAIN_CMD_GCC=/usr/bin/gcc
-BROSX_TOOLCHAIN_CMD_Gxx=/usr/bin/g++ 
-BROSX_TOOLCHAIN_CMD_Cxx=/usr/bin/c++ 
-BROSX_TOOLCHAIN_CMD_CPP=/usr/bin/cpp 
-BROSX_TOOLCHAIN_CMD_CLANG=/usr/bin/clang
-BROSX_TOOLCHAIN_CMD_AS=/usr/bin/as
-BROSX_TOOLCHAIN_CMD_LD=/usr/bin/ld 
-BROSX_TOOLCHAIN_CMD_NM=/usr/bin/nm 
-BROSX_TOOLCHAIN_CMD_AR=/usr/bin/ar
-BROSX_TOOLCHAIN_CMD_STRIP=/usr/bin/strip 
-BROSX_TOOLCHAIN_CMD_RANLIB=/usr/bin/ranlib 
-BROSX_TOOLCHAIN_CMD_OBJCOPY=/usr/bin/objcopy 
-BROSX_TOOLCHAIN_CMD_OBJDUMP=/usr/bin/objdump 
-BROSX_TOOLCHAIN_CMD_READELF=/usr/bin/readelf 
-BROSX_TOOLCHAIN_CMD_XCRUN=/usr/bin/xcrun 
+BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
+BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
+BROSX_TOOLCHAIN_CMD_gxx=/usr/bin/g++ 
+BROSX_TOOLCHAIN_CMD_cxx=/usr/bin/c++ 
+BROSX_TOOLCHAIN_CMD_cpp=/usr/bin/cpp 
+BROSX_TOOLCHAIN_CMD_clang=/usr/bin/clang
+BROSX_TOOLCHAIN_CMD_as=/usr/bin/as
+BROSX_TOOLCHAIN_CMD_ld=/usr/bin/ld 
+BROSX_TOOLCHAIN_CMD_nm=/usr/bin/nm 
+BROSX_TOOLCHAIN_CMD_ar=/usr/bin/ar
+BROSX_TOOLCHAIN_CMD_strip=/usr/bin/strip 
+BROSX_TOOLCHAIN_CMD_ranlib=/usr/bin/ranlib 
+BROSX_TOOLCHAIN_CMD_objcopy=/usr/bin/objcopy 
+BROSX_TOOLCHAIN_CMD_objdump=/usr/bin/objdump 
+BROSX_TOOLCHAIN_CMD_readelf=/usr/bin/readelf 
+BROSX_TOOLCHAIN_CMD_xcrun=/usr/bin/xcrun 
+BROSX_TOOLCHAIN_CMD_Rez=/usr/bin/xcrun 
+BROSX_TOOLCHAIN_CMD_SetFile=/usr/bin/xcrun 
 
 # toolchain wrapper logging
 BROSX_TOOLCHAIN_WRAPPER_LOG_DIR=$BROSX_HOME/output/build
@@ -178,7 +183,7 @@ mkdir -p $BROSX_TOOLCHAIN_WRAPPER_LOG_DIR
 for tool in $cmdToolchain; do
 	var=BROSX_TOOLCHAIN_${tool}
 	cmd=`echo $tool | sed "s/xx/++/"`
-	cmdLink=$BROSX_TOOLCHAIN/bin/${cmd,,}
+	cmdLink=$BROSX_TOOLCHAIN/bin/${cmd}
 	mkdir -p $dir
 	installLink $BROSX_TOOLCHAIN_WRAPPER $cmdLink $var
 done
