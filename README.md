@@ -33,6 +33,7 @@ We need the following tools:
 - diffstat
 - diffutils
 - dot
+- egrep
 - file
 - findutils
 - getopt
@@ -157,3 +158,5 @@ The result will look like
 It was tested on
 - OSX 10.10 Yosemite
 - Xcode 6.4
+
+The build takes about 35 min on 2,5 GHz Intel Core i7 with 16 GB 1600 MHz DDR3.
