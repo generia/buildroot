@@ -227,7 +227,7 @@ function diffPackage() {
 	
 	local outDir=$brHome/output/build/$outName-$pkgVersion
 	local srcDir=""
-	local srcPath="board boot fs package"
+	local srcPath="package fs boot board"
 	for dir in $srcPath; do
 		if [ -d $brHome/$dir/$pkgName ]; then
 			srcDir=$brHome/$dir/$pkgName
