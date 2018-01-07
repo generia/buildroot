@@ -1,0 +1,22 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "Python-2.7.14.tar.xz" "python" "host-python" "add-include-for-uuid" "\
+        Include/pymactoolbox.h \
+    ";
+
+
+===============================================================================
+--- a/Include/pymactoolbox.h	2017-09-16 19:38:35.000000000 +0200
++++ b/Include/pymactoolbox.h	2018-01-07 15:58:35.000000000 +0100
+@@ -7,6 +7,7 @@
+ 	extern "C" {
+ #endif
+ 
++#include </usr/include/uuid/uuid.h>
+ #include <Carbon/Carbon.h>
+ 
+ /*

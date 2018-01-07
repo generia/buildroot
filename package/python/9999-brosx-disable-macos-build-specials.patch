@@ -1,0 +1,54 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "Python-2.7.14.tar.xz" "python" "host-python" "disable-macos-build-specials" "\
+        configure.ac \
+        setup.py \
+    ";
+
+
+===============================================================================
+--- a/configure.ac	2017-09-16 19:38:35.000000000 +0200
++++ b/configure.ac	2018-01-07 15:49:43.000000000 +0100
+===============================================================================
+@@ -1137,7 +1150,7 @@
+ 	    BASECFLAGS="$BASECFLAGS -m486 -DSCO5"
+ 	    ;;
+ 	# is there any other compiler on Darwin besides gcc?
+-	Darwin*)
++	Darwin-Not-this-time-for-BROSX*)
+ 	    # -Wno-long-double, -no-cpp-precomp, and -mno-fused-madd
+ 	    # used to be here, but non-Apple gcc doesn't accept them.
+ 	    if test "${CC}" = gcc
+--- a/setup.py	2017-09-16 19:38:35.000000000 +0200
++++ b/setup.py	2018-01-07 15:47:35.000000000 +0100
+@@ -1337,7 +1338,7 @@
+             missing.append('gdbm')
+ 
+         # Unix-only modules
+-        if host_platform not in ['win32']:
++        if host_platform not in ['win32', 'darwin']:
+             # Steen Lumholt's termios module
+             exts.append( Extension('termios', ['termios.c']) )
+             # Jeremy Hylton's rlimit interface
+@@ -1357,7 +1358,7 @@
+                                        libraries = libs) )
+             else:
+                 missing.append('nis')
+-        else:
++        elif host_platform not in ['darwin']:
+             missing.extend(['nis', 'resource', 'termios'])
+ 
+         # Curses support, requiring the System V version of curses, often
+@@ -1693,7 +1694,7 @@
+                     raise RuntimeError("%s not found" % name)
+ 
+                 # Here's the whole point:  add the extension with sources
+-                exts.append(Extension(name, srcs + extra_srcs, **kwds))
++                #exts.append(Extension(name, srcs + extra_srcs, **kwds))
+ 
+             # Core Foundation
+             core_kwds = {'extra_compile_args': carbon_extra_compile_args,
