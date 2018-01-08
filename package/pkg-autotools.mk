@@ -164,6 +164,9 @@ $(2)_CONF_ENV			?=
 $(2)_CONF_OPTS			?=
 $(2)_MAKE_ENV			?=
 $(2)_MAKE_OPTS			?=
+$(2)_CFLAGS				?= $$(HOST_CFLAGS)
+$(2)_CXXFLAGS			?= $$(HOST_CXXFLAGS)
+$(2)_LDFLAGS				?= $$(HOST_LDFLAGS)
 $(2)_INSTALL_OPTS                ?= install
 $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
 $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
@@ -215,8 +218,9 @@ else
 define $(2)_CONFIGURE_CMDS
 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
 	$$(HOST_CONFIGURE_OPTS) \
-	CFLAGS="$$(HOST_CFLAGS)" \
-	LDFLAGS="$$(HOST_LDFLAGS)" \
+	CFLAGS="$$($$(PKG)_CFLAGS)" \
+	CXXFLAGS="$$($$(PKG)_CXXFLAGS)" \
+	LDFLAGS="$$($$(PKG)_LDFLAGS)" \
 	$$($$(PKG)_CONF_ENV) \
 	CONFIG_SITE=/dev/null \
 	./configure \
