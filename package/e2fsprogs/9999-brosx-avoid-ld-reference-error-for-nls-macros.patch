@@ -1,0 +1,25 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "e2fsprogs-1.43.7.tar.xz" "e2fsprogs" "host-e2fsprogs" "avoid-ld-reference-error-for-nls-macros" "\
+        misc/e2image.c \
+    ";
+
+
+===============================================================================
+--- a/misc/e2image.c	2017-10-16 07:45:45.000000000 +0200
++++ b/misc/e2image.c	2018-01-09 22:19:42.000000000 +0100
+@@ -79,6 +79,10 @@
+ static char *check_buf;
+ static int skipped_blocks;
+ 
++#define _(a) (a)
++#define N_(a) a
++#define P_(singular, plural, n) ((n) == 1 ? (singular) : (plural))
++
+ static blk64_t align_offset(blk64_t offset, unsigned int n)
+ {
+ 	return (offset + n - 1) & ~((blk64_t) n - 1);

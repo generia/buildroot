@@ -17,6 +17,7 @@ E2FSPROGS_INSTALL_STAGING = YES
 E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
 HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf host-util-linux
 
+HOST_E2FSPROGS_CFLAGS=-I$(HOST_DIR)include -g
 # If both e2fsprogs and busybox are selected, make certain e2fsprogs
 # wins the fight over who gets to have their utils actually installed
 ifeq ($(BR2_PACKAGE_BUSYBOX),y)
@@ -33,7 +34,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
 	--disable-libblkid \
 	--disable-libuuid \
 	--enable-symlink-install \
-	--disable-testio-debug
+	--disable-testio-debug \
+	--disable-nls
 
 # Set the binary directories to "/bin" and "/sbin" to override programs
 # installed by busybox.
