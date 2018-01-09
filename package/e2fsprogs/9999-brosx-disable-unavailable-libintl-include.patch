@@ -1,0 +1,21 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "e2fsprogs-1.43.7.tar.xz" "e2fsprogs" "host-e2fsprogs" "disable-unavailable-libintl-include" "\
+        lib/support/nls-enable.h \
+    ";
+
+
+===============================================================================
+--- a/lib/support/nls-enable.h	2017-10-16 07:45:45.000000000 +0200
++++ b/lib/support/nls-enable.h	2018-01-09 01:09:00.000000000 +0100
+@@ -1,5 +1,5 @@
+ #if defined(ENABLE_NLS) && !defined(DEBUGFS)
+-#include <libintl.h>
++//#include <libintl.h>
+ #include <locale.h>
+ #define _(a) (gettext (a))
+ #ifdef gettext_noop
