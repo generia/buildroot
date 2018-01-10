@@ -1,0 +1,42 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "genimage-9.tar.xz" "genimage" "host-genimage" "add-missing-gnuc-strdupa-macros" "\
+        genimage.h \
+    ";
+
+
+===============================================================================
+--- a/genimage.h	2016-08-15 12:35:38.000000000 +0200
++++ b/genimage.h	2018-01-09 22:47:44.000000000 +0100
+@@ -3,6 +3,27 @@
+ 
+ #include "list.h"
+ 
++/* Duplicate S, returning an identical alloca'd string.  */
++# define strdupa(s)							      \
++  (__extension__							      \
++    ({									      \
++      const char *__old = (s);					      \
++      size_t __len = strlen (__old) + 1;				      \
++      char *__new = (char *) __builtin_alloca (__len);			      \
++      (char *) memcpy (__new, __old, __len);				      \
++    }))
++
++/* Return an alloca'd copy of at most N bytes of string.  */
++# define strndupa(s, n)							      \
++  (__extension__							      \
++    ({									      \
++      const char *__old = (s);					      \
++      size_t __len = strnlen (__old, (n));				      \
++      char *__new = (char *) __builtin_alloca (__len + 1);		      \
++      __new[__len] = '\0';						      \
++      (char *) memcpy (__new, __old, __len);				      \
++    }))
++
+ struct image_handler;
+ 
+ struct image *image_get(const char *filename);
