@@ -9,6 +9,10 @@ hostDir=$BROSX_HOME/output/host
 
 info() {
 	if [ "x$logFile" != "x" ]; then
+		if [ ! -f  "$logFile" ]; then
+			local logDir=`dirname $logFile`
+			mkdir -p $logDir
+		fi
 		echo "[$(date +"%T") - $tcName] $1" >> $logFile
 	fi	
 }
