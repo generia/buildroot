@@ -4,10 +4,14 @@
 #
 ################################################################################
 
-ifeq ($(BR2_arc),y)
+ifeq ($(BR2_GLIBC_VERSION),"arc-2017.09-release")
 GLIBC_VERSION =  arc-2017.09-release
 GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
 GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
+else ifeq ($(BR2_GLIBC_VERSION),"2.26")
+GLIBC_VERSION =  2.26
+GLIBC_SITE = $(BR2_GNU_MIRROR)/glibc
+GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
 else
 # Generate version string using:
 #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
@@ -29,9 +33,12 @@ GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICEN
 # glibc is part of the toolchain so disable the toolchain dependency
 GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
 
+# cross-rpcgen needs libintl from 'host-gettext' on OSX
+GLIBC_MAKE_ENV = BUILD_CFLAGS="$(GLIBC_CFLAGS)" BUILD_LDFLAGS="-L$(HOST_DIR)lib -lintl"
+
 # Before glibc is configured, we must have the first stage
 # cross-compiler and the kernel headers
-GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk host-gettext
 
 GLIBC_SUBDIR = build
 
