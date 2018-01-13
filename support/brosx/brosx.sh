@@ -55,6 +55,9 @@ BROSX_sysctl_CMD=/usr/sbin/sysctl
 BROSX_Makeinfo_CMD=/opt/local/bin/Makeinfo 
 BROSX_texi2dvi_CMD=/opt/local/bin/texi2dvi
 
+# linux
+BROSX_hostname_CMD=/bin/hostname
+
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
