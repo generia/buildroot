@@ -27,6 +27,7 @@ define ZLIB_CONFIGURE_CMDS
 		$(TARGET_CONFIGURE_ARGS) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
+		CHOST=$(GNU_TARGET_NAME) \
 		./configure \
 		$(ZLIB_SHARED) \
 		--prefix=/usr \
