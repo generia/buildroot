@@ -12,7 +12,7 @@ HOST_MKPASSWD_LICENSE = GPL-2.0+
 define HOST_MKPASSWD_BUILD_CMDS
 	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
 		package/mkpasswd/mkpasswd.c package/mkpasswd/utils.c \
-		-o $(@D)/mkpasswd -lcrypt
+		-o $(@D)/mkpasswd
 endef
 
 define HOST_MKPASSWD_INSTALL_CMDS
