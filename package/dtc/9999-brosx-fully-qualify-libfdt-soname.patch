@@ -1,0 +1,23 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "dtc-1.4.4.tar.xz" "dtc" "host-dtc" "fully-qualify-libfdt-soname" "\
+        Makefile \
+    ";
+
+
+===============================================================================
+--- a/Makefile	2017-03-10 01:17:23.000000000 +0100
++++ b/Makefile	2018-01-14 22:03:17.000000000 +0100
+@@ -287,7 +287,7 @@
+ 
+ $(LIBFDT_lib):
+ 	@$(VECHO) LD $@
+-	$(CC) $(LDFLAGS) -fPIC $(SHAREDLIB_LINK_OPTIONS)$(LIBFDT_soname) -o $(LIBFDT_lib) $^
++	$(CC) $(LDFLAGS) -fPIC $(SHAREDLIB_LINK_OPTIONS)$(DESTDIR)$(LIBDIR)/$(LIBFDT_soname) -o $(LIBFDT_lib) $^
+ 
+ %.lex.c: %.l
+ 	@$(VECHO) LEX $@

@@ -1,0 +1,23 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "qemu-2.10.2.tar.xz" "qemu" "host-qemu" "fully-qualify-libfdt-soname" "\
+        dtc/Makefile \
+    ";
+
+
+===============================================================================
+--- a/dtc/Makefile	2017-12-18 17:21:05.000000000 +0100
++++ b/dtc/Makefile	2018-01-14 21:37:38.000000000 +0100
+@@ -287,7 +287,7 @@
+ 
+ $(LIBFDT_lib):
+ 	@$(VECHO) LD $@
+-	$(CC) $(LDFLAGS) -fPIC $(SHAREDLIB_LINK_OPTIONS)$(LIBFDT_soname) -o $(LIBFDT_lib) $^
++	$(CC) $(LDFLAGS) -fPIC $(SHAREDLIB_LINK_OPTIONS)$(DESTDIR)$(LIBDIR)/$(LIBFDT_soname) -o $(LIBFDT_lib) $^
+ 
+ %.lex.c: %.l
+ 	@$(VECHO) LEX $@
