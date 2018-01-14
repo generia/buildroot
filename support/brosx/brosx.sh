@@ -50,6 +50,7 @@ BROSX_vi_CMD=/usr/bin/vi
 
 # qemu
 BROSX_sysctl_CMD=/usr/sbin/sysctl
+BROSX_pod2man_CMD=/opt/local/bin/pod2man
 
 # host-e2fsprogs
 BROSX_Makeinfo_CMD=/opt/local/bin/Makeinfo 
