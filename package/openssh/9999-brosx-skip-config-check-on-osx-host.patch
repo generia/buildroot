@@ -1,0 +1,24 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "openssh-7.6p1.tar.gz" "openssh" "openssh" "skip-config-check-on-osx-host" "\
+        Makefile.in \
+    ";
+
+
+===============================================================================
+--- a/Makefile.in	2017-10-02 21:34:26.000000000 +0200
++++ b/Makefile.in	2018-01-27 01:54:32.000000000 +0100
+@@ -307,7 +307,8 @@
+ install-nosysconf: $(CONFIGFILES) $(MANPAGES) $(TARGETS) install-files
+ 
+ check-config:
+-	-$(DESTDIR)$(sbindir)/sshd -t -f $(DESTDIR)$(sysconfdir)/sshd_config
++	echo "brosx: can't check config on OSX host, skipping ..."
++	#-$(DESTDIR)$(sbindir)/sshd -t -f $(DESTDIR)$(sysconfdir)/sshd_config
+ 
+ install-files:
+ 	$(srcdir)/mkinstalldirs $(DESTDIR)$(bindir)
