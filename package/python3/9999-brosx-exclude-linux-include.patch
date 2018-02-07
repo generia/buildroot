@@ -1,0 +1,24 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "Python-3.6.3.tar.xz" "python3" "host-python3" "exclude-linux-include" "\
+        Modules/termios.c \
+    ";
+
+
+===============================================================================
+--- a/Modules/termios.c	2017-10-03 07:52:02.000000000 +0200
++++ b/Modules/termios.c	2018-02-07 13:51:14.000000000 +0100
+@@ -9,7 +9,9 @@
+ #endif
+ 
+ #include <termios.h>
++// BROSX: #include <linux/serial.h>
+ #include <sys/ioctl.h>
++#undef TIOCTTYGSTRUCT
+ 
+ /* HP-UX requires that this be included to pick up MDCD, MCTS, MDSR,
+  * MDTR, MRI, and MRTS (appearantly used internally by some things

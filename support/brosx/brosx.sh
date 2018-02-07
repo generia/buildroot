@@ -6,6 +6,9 @@ BROSX_HOME=$BROSX_ROOT/buildroot
 BROSX_TOOLS=$BROSX_ROOT/tools
 BROSX_TOOLCHAIN=$BROSX_ROOT/toolchain
 
+# locale settings
+BROSX_LOCALE=en_US.UTF-8
+
 ######################### configure tool path according to local installation #########################
 
 # tool-commands (*_CMD), tool-sets (*_HOME) and gnu-prefixed tool-sets (*_GHOME)
@@ -59,6 +62,12 @@ BROSX_texi2dvi_CMD=/opt/local/bin/texi2dvi
 # linux
 BROSX_hostname_CMD=/bin/hostname
 
+# cmake
+BROSX_ps_CMD=/bin/ps
+
+# host-python3
+BROSX_sw_vers_CMD=/usr/bin/sw_vers
+
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
@@ -106,14 +115,14 @@ cmdHGhomes=""
 cmdToolchain=""
 
 for var in ${!BROSX_*}; do 
-	name=`echo $var | sed "s/BROSX_\([^_]*\)_.*/\1/"`
+	name=`echo $var | sed "s/BROSX_\(.*\)_.*$/\1/"`
 	if [ $name == TOOLCHAIN ]; then
 		tool=`echo $var | sed "s/BROSX_\([^_]*\)_CMD_\([^_]*\)/\2/"`
 		if [ "x$tool" != "x$var" ]; then	
 			cmdToolchain="$cmdToolchain $tool"
 		fi
 	else
-		type=`echo $var | sed "s/BROSX_\([^_]*\)_\([^_]*\)/\2/"`
+		type=`echo $var | sed "s/BROSX_\(.*\)_\([^_]*\)$/\2/"`
 		case $type in
 		    CMD )
 		        cmds="$cmds $name"
@@ -197,6 +206,10 @@ for tool in $cmdToolchain; do
 done
 
 PATH=$BROSX_PATH
+
+export LC_ALL=$BROSX_LOCALE
+export LANG=$BROSX_LOCALE
+export LANGUAGE=$BROSX_LOCALE
 
 export TERM LS_COLORS PS1 M4 PATH BROSX_ROOT BROSX_HOME BROSX_TOOLS ${!BROSX_TOOLCHAIN_*}
 
