@@ -21,7 +21,9 @@ MESA3D_DEPENDENCIES = \
 	host-flex \
 	expat \
 	libdrm \
-	zlib
+	zlib \
+	host-python \
+	host-python-mako
 
 # Disable assembly usage.
 MESA3D_CONF_OPTS = --disable-asm
