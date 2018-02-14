@@ -18,7 +18,7 @@ WAYLAND_AUTORECONF = YES
 
 # wayland-scanner is only needed for building, not on the target
 WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
-HOST_WAYLAND_CONF_OPTS = --disable-tests
+HOST_WAYLAND_CONF_OPTS = --disable-tests --disable-libraries
 
 # Remove the DTD from the target, it's not needed at runtime
 define WAYLAND_TARGET_CLEANUP
