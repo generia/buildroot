@@ -1,0 +1,17 @@
+# weston systemd service unit file                                                                          
+
+[Unit]
+Description=Weston launcher
+After=systemd-user-sessions.service
+
+[Service]
+Environment=PATH=/usr/bin:/bin:/usr/sbin:/sbin
+Environment=HOME=/root
+ExecStart=/root/weston.sh
+Restart=always
+RestartSec=10
+
+[Install]
+Alias=display-manager.service
+WantedBy=graphical.target
+#WantedBy=multi-user.target

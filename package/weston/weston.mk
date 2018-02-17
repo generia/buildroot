@@ -141,4 +141,15 @@ else
 WESTON_CONF_OPTS += --disable-demo-clients-install
 endif
 
+
+define WESTON_INSTALL_INIT_SYSTEMD
+	$(INSTALL) -D -m 644 package/weston/weston.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/weston.service
+	$(INSTALL) -D -m 755 package/weston/weston.sh \
+		$(TARGET_DIR)/root/weston.sh
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -fs ../../../../usr/lib/systemd/system/weston.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/weston.service
+endef
+
 $(eval $(autotools-package))
