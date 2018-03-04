@@ -120,6 +120,19 @@ HOST_QEMU_OPTS += --enable-vde
 HOST_QEMU_DEPENDENCIES += host-vde2
 endif
 
+HOST_QEMU_OPTS +=	--enable-debug \
+					--enable-kvm \
+					--enable-attr \
+					--enable-vhost-net \
+					--disable-vhost-vsock \
+					--disable-virglrenderer \
+					--disable-opengl \
+					--disable-libssh2 \
+					--enable-hax \
+					--disable-kvm \
+					--enable-virtfs
+
+
 # Override CPP, as it expects to be able to call it like it'd
 # call the compiler.
 define HOST_QEMU_CONFIGURE_CMDS
@@ -226,14 +239,10 @@ define QEMU_CONFIGURE_CMDS
 			--cross-prefix=$(TARGET_CROSS) \
 			--with-system-pixman \
 			--audio-drv-list= \
-			--enable-kvm \
-			--enable-attr \
-			--enable-vhost-net \
 			--disable-bsd-user \
 			--disable-xen \
 			--disable-slirp \
 			--disable-vnc \
-			--disable-virtfs \
 			--disable-brlapi \
 			--disable-curses \
 			--disable-curl \
