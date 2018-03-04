@@ -1,4 +1,6 @@
 [Match]
-Name=SYSTEMD_NETWORKD_DHCP_IFACE
+Name=en*
+
 [Network]
-DHCP=ipv4
+Description=BROSX Basic Network
+DHCP=yes

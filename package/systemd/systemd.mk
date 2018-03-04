@@ -5,6 +5,7 @@
 ################################################################################
 
 SYSTEMD_VERSION = 234
+#SYSTEMD_VERSION = 237
 SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
 SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
 SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
@@ -15,8 +16,10 @@ SYSTEMD_DEPENDENCIES = \
 	util-linux \
 	kmod \
 	host-gperf
+# meson: 	host-meson
 
 SYSTEMD_PROVIDES = udev
+#meson: SYSTEMD_AUTORECONF = YES
 SYSTEMD_AUTORECONF = YES
 
 # Make sure that systemd will always be built after busybox so that we have
@@ -56,6 +59,7 @@ SYSTEMD_CONF_ENV = \
 define SYSTEMD_RUN_INTLTOOLIZE
 	cd $(@D) && $(HOST_DIR)/bin/intltoolize --force --automake
 endef
+# meson: SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_INTLTOOLIZE
 SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_INTLTOOLIZE
 
 ifeq ($(BR2_PACKAGE_ACL),y)
