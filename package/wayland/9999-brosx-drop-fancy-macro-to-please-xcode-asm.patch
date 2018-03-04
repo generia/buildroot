@@ -1,0 +1,65 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "wayland-1.14.0.tar.xz" "wayland" "host-wayland" "drop-fancy-macro-to-please-xcode-asm" "\
+        src/dtddata.S \
+    ";
+
+
+===============================================================================
+--- a/src/dtddata.S	2017-08-08 20:20:52.000000000 +0200
++++ b/src/dtddata.S	2018-01-13 21:30:08.000000000 +0100
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright © 2015 Collabora, Ltd.
++ * Copyright ï¿½ 2015 Collabora, Ltd.
+  *
+  * Permission is hereby granted, free of charge, to any person obtaining
+  * a copy of this software and associated documentation files (the
+@@ -33,18 +33,35 @@
+ 
+ /* from: http://www.linuxjournal.com/content/embedding-file-executable-aka-hello-world-version-5967#comment-348129 */
+ 
++#ifdef __USER_LABEL_PREFIX__
++#define CONCAT1(a, b) CONCAT2(a, b)
++#define CONCAT2(a, b) a ## b
++#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
++#else
++#endif
++
+ .macro binfile name file
+ 	.p2align 2
+-	.globl \name\()_begin
+-\name\()_begin:
++	.globl SYM(\name\()_begin)
++SYM(\name\()_begin):
+ 	.incbin "\file"
+-\name\()_end:
++SYM(\name\()_end):
+ 	.byte 0
+ 	.p2align 2
+-	.globl \name\()_len
+-\name\()_len:
+-	.int (\name\()_end - \name\()_begin)
++	.globl SYM(\name\()_len)
++SYM(\name\()_len):
++	.int (SYM(\name\()_end) - SYM(\name\()_begin))
+ .endm
+ 
+-.section .rodata
+-binfile DTD_DATA src/wayland.dtd.embed
++//.section .rodata
++//binfile DTD_DATA src/wayland.dtd.embed
++	.p2align 2
++	.globl _DTD_DATA_begin
++_DTD_DATA_begin:
++	.incbin "src/wayland.dtd.embed"
++_DTD_DATA_end:
++	.byte 0
++	.p2align 2
++	.globl _DTD_DATA_len
++_DTD_DATA_len:
++	.int (_DTD_DATA_end - _DTD_DATA_begin)
