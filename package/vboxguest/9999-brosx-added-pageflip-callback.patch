@@ -1,0 +1,144 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "VBoxGuestAdditions_5.2.6.iso" "vboxguest" "vboxguest" "added-pageflip-callback" "\
+        vboxvideo/vbox_mode.c \
+    ";
+
+
+===============================================================================
+--- a/src/vboxguest-5.2.6/vboxvideo/vbox_mode.c	2018-01-15 14:52:17.000000000 +0100
++++ b/src/vboxguest-5.2.6/vboxvideo/vbox_mode.c	2018-02-27 01:52:41.000000000 +0100
+@@ -35,6 +35,7 @@
+ #include "vbox_drv.h"
+ #include <linux/export.h>
+ #include <drm/drm_crtc_helper.h>
++#include <drm/drm_atomic_helper.h>
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0) || defined(RHEL_73)
+ #include <drm/drm_plane_helper.h>
+ #endif
+@@ -54,6 +55,7 @@
+ static void vbox_do_modeset(struct drm_crtc *crtc,
+ 			    const struct drm_display_mode *mode)
+ {
++	DRM_DEBUG("brosx: vbox_do_modeset crtc='%s' hdisplay='%d' vdisplay='%d' status=%d\n", crtc->name, mode->hdisplay, mode->vdisplay, mode->status);
+ 	struct vbox_crtc *vbox_crtc = to_vbox_crtc(crtc);
+ 	struct vbox_private *vbox;
+ 	int width, height, bpp, pitch;
+@@ -306,6 +308,7 @@
+ 
+ 	mutex_lock(&vbox->hw_mutex);
+ 	rc = vbox_set_view(crtc);
++	DRM_DEBUG("brosx: vbox_crtc_mode_set crtc='%s' x='%d' y='%d' - set view: rc=%d\n", crtc->name, x, y, rc);
+ 	if (!rc)
+ 		vbox_do_modeset(crtc, mode);
+ 	hgsmi_update_input_mapping(vbox->guest_pool, 0, 0,
+@@ -348,6 +351,41 @@
+ 	kfree(crtc);
+ }
+ 
++static int vbox_crtc_page_flip(struct drm_crtc *crtc,
++			 struct drm_framebuffer *fb,
++			 struct drm_pending_vblank_event *event,
++			 uint32_t flags,
++			 struct drm_modeset_acquire_ctx *ctx) {
++	DRM_DEBUG("brosx: drm_mvbox_crtc_page_flip crtc='%s'\n", crtc->name);
++
++	struct vbox_private *vbox = crtc->dev->dev_private;
++
++	struct drm_framebuffer *old_fb = crtc->primary->fb;
++	unsigned long irqflags;
++
++	crtc->primary->fb = fb;
++	DRM_DEBUG("brosx: drm_mvbox_crtc_page_flip crtc='%s' - new-fb-%p[%d x %d]\n", crtc->name, fb, fb->width, fb->height);
++	DRM_DEBUG("brosx: drm_mvbox_crtc_page_flip crtc='%s' - old-fb-%p[%d x %d]\n", crtc->name, old_fb, old_fb->width, old_fb->height);
++	//bochs_crtc_mode_set_base(crtc, 0, 0, old_fb);
++	vbox_crtc_mode_set_base(crtc, 0, 0, old_fb);
++	if (event) {
++		spin_lock_irqsave(&vbox->dev->event_lock, irqflags);
++		drm_crtc_send_vblank_event(crtc, event);
++		spin_unlock_irqrestore(&vbox->dev->event_lock, irqflags);
++	}
++	return 0;
++}
++
++
++static int vbox_crtc_page_flip_target(struct drm_crtc *crtc,
++			struct drm_framebuffer *fb,
++			struct drm_pending_vblank_event *event,
++			uint32_t flags, uint32_t target,
++			struct drm_modeset_acquire_ctx *ctx) {
++	DRM_DEBUG("brosx: drm_mvbox_crtc_page_flip_target crtc='%s'\n", crtc->name);
++	return 0;
++}
++
+ static const struct drm_crtc_funcs vbox_crtc_funcs = {
+ 	.cursor_move = vbox_cursor_move,
+ 	.cursor_set2 = vbox_cursor_set2,
+@@ -355,6 +393,9 @@
+ 	.set_config = drm_crtc_helper_set_config,
+ 	/* .gamma_set = vbox_crtc_gamma_set, */
+ 	.destroy = vbox_crtc_destroy,
++	//.page_flip = drm_atomic_helper_page_flip,
++	.page_flip = vbox_crtc_page_flip,
++	//.page_flip_target = vbox_crtc_page_flip_target,
+ };
+ 
+ static struct vbox_crtc *vbox_crtc_init(struct drm_device *dev, unsigned int i)
+@@ -555,6 +596,8 @@
+ 	 */
+ 	hgsmi_report_flags_location(vbox->guest_pool, GUEST_HEAP_OFFSET(vbox) +
+ 				     HOST_FLAGS_OFFSET);
++	DRM_DEBUG("brosx: vbox_get_modes crtc_id='%d'\n", vbox_connector->vbox_crtc->crtc_id);
++
+ 	if (vbox_connector->vbox_crtc->crtc_id == 0)
+ 		vbox_report_caps(vbox);
+ 	if (!vbox->initial_mode_queried) {
+@@ -562,18 +605,35 @@
+ 			vbox->initial_mode_queried = true;
+ 			vbox_report_hotplug(vbox);
+ 		}
+-		return drm_add_modes_noedid(connector, 800, 600);
++		//return drm_add_modes_noedid(connector, 800, 600);
++		return drm_add_modes_noedid(connector, 1280, 800);
++		//return drm_add_modes_noedid(connector, 2560, 1600);
+ 	}
+ 	num_modes = drm_add_modes_noedid(connector, 2560, 1600);
+ 	preferred_width = vbox_connector->mode_hint.width ?
+ 			  vbox_connector->mode_hint.width : 1024;
+ 	preferred_height = vbox_connector->mode_hint.height ?
+ 			   vbox_connector->mode_hint.height : 768;
++	DRM_DEBUG("brosx: vbox_get_modes crtc_id='%d' - num_modes='%d' pref-width='%d' pref-height='%d'\n", vbox_connector->vbox_crtc->crtc_id, num_modes, preferred_width, preferred_height);
+ 	mode = drm_cvt_mode(connector->dev, preferred_width, preferred_height,
+ 			    60, false, false, false);
+ 	if (mode) {
+ 		mode->type |= DRM_MODE_TYPE_PREFERRED;
+ 		drm_mode_probed_add(connector, mode);
++		// brosx: added
++		drm_set_preferred_mode(connector, mode->hdisplay, mode->vdisplay);
++
++
++		struct drm_crtc *crtc = &vbox_connector->vbox_crtc->base;
++		struct vbox_private *vbox = crtc->dev->dev_private;
++		//struct drm_framebuffer *old_fb = crtc->primary->fb;
++		//vbox_do_modeset(&vbox_connector->vbox_crtc->base, mode);
++		/*
++		mutex_lock(&vbox->hw_mutex);
++		vbox_do_modeset(crtc, mode);
++		mutex_unlock(&vbox->hw_mutex);
++		*/
++		//vbox_crtc_mode_set(crtc, mode, mode, 0, 0, old_fb);
+ 		++num_modes;
+ 	}
+ 	vbox_set_edid(connector, preferred_width, preferred_height);
+@@ -602,6 +662,7 @@
+ static int vbox_mode_valid(struct drm_connector *connector,
+ 			   struct drm_display_mode *mode)
+ {
++	DRM_DEBUG("brosx: vbox_mode_valid preferred mode-width='%d' mode-height='%d' MODE_OK\n", mode->hdisplay, mode->vdisplay);
+ 	return MODE_OK;
+ }
+ 

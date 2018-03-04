@@ -68,6 +68,9 @@ BROSX_ps_CMD=/bin/ps
 # host-python3
 BROSX_sw_vers_CMD=/usr/bin/sw_vers
 
+# vboxguest
+BROSX_hdiutil_CMD=/usr/bin/hdiutil
+
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
@@ -236,7 +239,6 @@ function diffPackage() {
 	local brHome=$BROSX_HOME
 	local dlDir=$brHome/dl
 	local tarFile=$dlDir/$tarName
-	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
 	
 	local workDir=$dlDir/.diffPackage
 	mkdir -p $workDir
@@ -246,7 +248,28 @@ function diffPackage() {
 		
 	local tarDir=$workDir/`ls $workDir`
 	
+	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
 	local outDir=$brHome/output/build/$outName-$pkgVersion
+	
+	diffPackageFolder "$tarDir" "$outDir" "$tarName" "$pkgName" "$outName" "$patchName" "$files"
+	
+	echo "- removing work-directory '$workDir' ..."
+	rm -Rf $workDir
+	echo "done."
+}
+
+function diffPackageFolder() {
+	local tarName=$1
+	local pkgName=$2
+	local outName=$3
+	local patchName=$4
+	local files=$5
+	local tarDir=$6
+	local outDir=$7
+	
+	local brHome=$BROSX_HOME
+	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	
 	local srcDir=""
 	local srcPath="package fs boot board"
 	for dir in $srcPath; do
@@ -259,7 +282,7 @@ function diffPackage() {
 		srcDir=$brHome/$pkgName
 	fi
 	
-	local patchFileName="9999-brosx-$4"
+	local patchFileName="9999-brosx-$patchName"
 	local patchFile=$srcDir/$patchFileName.patch
 	if [ -d $srcDir/$pkgVersion ]; then
 		 patchFile=$srcDir/$pkgVersion/$patchFileName.patch
@@ -289,10 +312,7 @@ function diffPackage() {
 	
 	echo "- reporting diffstats for patch-file '$patchFile' ..."
 	diffstat $patchFile
-	
-	echo "- removing work-directory '$workDir' ..."
-	rm -Rf $workDir
-	echo "done."
 }
+
 
 echo "brosx environment setup done."

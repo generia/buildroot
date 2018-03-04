@@ -1,0 +1,9 @@
+config BR2_PACKAGE_VBOXGUEST
+	bool "vboxguest"
+	depends on BR2_LINUX_KERNEL
+	depends on BR2_i386
+	help
+	  VBoxGuest installs the VirtualBox Linux Guest Additions
+	  drivers into the target image. 
+	
+	  http://download.virtualbox.org/virtualbox
