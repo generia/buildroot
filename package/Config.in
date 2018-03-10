@@ -1862,6 +1862,7 @@ comment "*                                                      "
 comment "See the manual:                                        "
 comment "http://buildroot.org/manual.html#faq-no-binary-packages"
 comment "-------------------------------------------------------"
+	source "package/dpkg/Config.in"
 	source "package/opkg/Config.in"
 	source "package/rpm/Config.in"
 endmenu
