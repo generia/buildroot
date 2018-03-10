@@ -34,6 +34,17 @@ endif
 # ensure it exists and a absolute path
 DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
 
+# handle local/remote name encoding
+DL_SEP := -+++-
+# get last word in basename of $1
+dlname = $(word $(words $(subst $(DL_SEP), ,$(notdir $(1)))),$(subst $(DL_SEP), ,$(notdir $(1))))
+# get first word in basename of $1
+dltarget = $(firstword $(subst $(DL_SEP), ,$(notdir $(1))))
+# get url from $1
+dlurl = $(dir $(1))/$(call dlname,$(1))
+# move dlname to dltarget, if both are different
+dlmove = (if [ "x$(call dlname,$(1))" != "x$(call dltarget,$(1))" ]; then mv $(DL_DIR)/$(call dlname,$(1)) $(DL_DIR)/$(call dltarget,$(1)); fi)
+         
 #
 # URI scheme helper functions
 # Example URIs:
@@ -218,11 +229,11 @@ endef
 ################################################################################
 
 define DOWNLOAD
-	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),DOWNLOAD)
+	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))),DOWNLOAD)
 endef
 
 define SOURCE_CHECK
-	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),SOURCE_CHECK)
+	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))),SOURCE_CHECK)
 endef
 
 define DOWNLOAD_INNER

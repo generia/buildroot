@@ -11,8 +11,9 @@
 #DPKG_SITE_METHOD = git
 DPKG_VERSION = 1.18.x
 DPKG_SITE = https://salsa.debian.org/dpkg-team/dpkg/repository/$(DPKG_VERSION)
-DPKG_SOURCE = archive.tar.gz
-#DPKG_SITE_METHOD = git
+#DPKG_SOURCE = archive.tar.gz
+DPKG_SOURCE = dpkg-$(DPKG_VERSION).tar.gz
+DPKG_SOURCE_TARBALL = archive.tar.gz
 
 # Uses PKG_CHECK_MODULES() in configure.ac
 #DPKG_DEPENDENCIES = host-pkgconf libarchive

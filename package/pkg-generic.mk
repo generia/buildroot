@@ -164,7 +164,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
 			break ; \
 		fi ; \
 	done
-	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
+	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(call dlurl,$(p)),$(call dlname,$(p)))$(sep)$(call dlmove,$(p))$(sep))
 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
 	$(Q)mkdir -p $(@D)
 	$(Q)touch $@
@@ -496,6 +496,12 @@ endif
 $(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
 $(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
 
+ifdef $(2)_SOURCE_TARBALL
+$(2)_SOURCE_SPEC = $$($(2)_SOURCE)$(DL_SEP)$$($(2)_SOURCE_TARBALL)
+else
+$(2)_SOURCE_SPEC = $$($(2)_SOURCE)
+endif
+
 ifndef $(2)_PATCH
  ifdef $(3)_PATCH
   $(2)_PATCH = $$($(3)_PATCH)
@@ -503,7 +509,7 @@ ifndef $(2)_PATCH
 endif
 
 $(2)_ALL_DOWNLOADS = \
-	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+	$$(foreach p,$$($(2)_SOURCE_SPEC) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
 		$$(if $$(findstring ://,$$(p)),$$(p),\
 			$$($(2)_SITE)/$$(p)))
 
@@ -721,7 +727,7 @@ endif # actual sources != ""
 
 $(1)-source-check: PKG=$(2)
 $(1)-source-check:
-	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(call dlurl,$$(p)),$$(call dlname,$$(p)))$$(sep))
 
 $(1)-external-deps:
 	@for p in $$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS) ; do \
