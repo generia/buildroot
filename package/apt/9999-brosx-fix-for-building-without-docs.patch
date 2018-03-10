@@ -1,0 +1,57 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "apt-1.5.y.tar.gz" "apt" "apt" "fix-for-building-without-docs" "\
+        CMakeLists.txt \
+        doc/CMakeLists.txt \
+    ";
+
+
+===============================================================================
+--- a/CMakeLists.txt	2017-10-26 13:38:39.000000000 +0200
++++ b/CMakeLists.txt	2018-03-10 16:18:07.000000000 +0100
+@@ -235,9 +235,11 @@
+ if (USE_NLS)
+ add_subdirectory(po)
+ 
++if(WITH_DOC)
+ # Link update-po4a into the update-po target
+ add_dependencies(update-po update-po4a)
+ endif()
++endif()
+ 
+ # Create our directories.
+ install_empty_directories(
+===============================================================================
+--- a/doc/CMakeLists.txt	2017-10-26 13:38:39.000000000 +0200
++++ b/doc/CMakeLists.txt	2018-03-10 16:16:02.000000000 +0100
+@@ -1,3 +1,4 @@
++if(WITH_DOC)
+ include(Documentation)
+ 
+ set(LINGUAS
+@@ -18,7 +19,6 @@
+     ../vendor/${CURRENT_VENDOR}/apt-vendor.ent
+ )
+ 
+-if(WITH_DOC)
+ add_docbook(apt-doc HTML TEXT ALL
+     DOCUMENTS
+         guide.dbk
+@@ -61,7 +61,6 @@
+         PATTERN "*.md5" EXCLUDE
+ )
+ 
+-endif()
+ 
+ add_docbook(apt-man MANPAGE ALL
+     DOCUMENTS
+@@ -87,3 +86,5 @@
+ add_update_po4a(update-po4a po/${PROJECT_NAME}-doc.pot "po/header.pot.txt")
+ 
+ add_subdirectory(examples)
++
++endif()

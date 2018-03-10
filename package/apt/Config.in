@@ -1,0 +1,13 @@
+config BR2_PACKAGE_APT
+	bool "apt"
+	select BR2_PACKAGE_GNUTLS
+	select BR2_PACKAGE_BZIP2
+	select BR2_PACKAGE_LZ4
+	select BR2_PACKAGE_ZLIB
+	select BR2_PACKAGE_DPKG
+	help
+	  APT (for Advanced Package Tool) is a set of tools for managing Debian packages, 
+	  and therefore the applications installed on your Debian system.
+
+	  https://wiki.debian.org/Apt
+	  https://salsa.debian.org/apt-team/apt
