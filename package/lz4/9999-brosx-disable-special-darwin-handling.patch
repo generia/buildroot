@@ -1,0 +1,23 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "lz4-v1.7.5.tar.gz" "lz4" "lz4" "disable-special-darwin-handling" "\
+        lib/Makefile \
+    ";
+
+
+===============================================================================
+--- a/lib/Makefile	2017-01-03 06:09:52.000000000 +0100
++++ b/lib/Makefile	2018-03-10 15:39:53.000000000 +0100
+@@ -54,7 +54,7 @@
+ 
+ # OS X linker doesn't support -soname, and use different extension
+ # see : https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/DynamicLibraryDesignGuidelines.html
+-ifeq ($(shell uname), Darwin)
++ifeq ($(shell uname), Darwin-OFF)
+ 	SHARED_EXT = dylib
+ 	SHARED_EXT_MAJOR = $(LIBVER_MAJOR).$(SHARED_EXT)
+ 	SHARED_EXT_VER = $(LIBVER).$(SHARED_EXT)

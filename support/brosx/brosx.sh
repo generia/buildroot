@@ -71,6 +71,9 @@ BROSX_sw_vers_CMD=/usr/bin/sw_vers
 # vboxguest
 BROSX_hdiutil_CMD=/usr/bin/hdiutil
 
+# apt
+BROSX_curl_CMD=/opt/local/bin/curl
+
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
@@ -228,6 +231,7 @@ function diffPackage() {
 	local outName=$3
 	local patchName=$4
 	local files=$5
+	local pkgVersion=$6
 
 	echo "This is brosx 'diffPackage' tool ..."
 	echo "- tarName: '$tarName'"
@@ -248,10 +252,12 @@ function diffPackage() {
 		
 	local tarDir=$workDir/`ls $workDir`
 	
-	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	if [ "x$pkgVersion]" == "x" ]; then 
+		pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	fi
 	local outDir=$brHome/output/build/$outName-$pkgVersion
 	
-	diffPackageFolder "$tarDir" "$outDir" "$tarName" "$pkgName" "$outName" "$patchName" "$files"
+	diffPackageFolder "$tarName" "$pkgName" "$outName" "$patchName" "$files" "$tarDir" "$outDir" "$pkgVersion"
 	
 	echo "- removing work-directory '$workDir' ..."
 	rm -Rf $workDir
@@ -266,9 +272,13 @@ function diffPackageFolder() {
 	local files=$5
 	local tarDir=$6
 	local outDir=$7
+	local pkgVersion=$8
 	
 	local brHome=$BROSX_HOME
-	local pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	
+	if [ "x$pkgVersion]" == "x" ]; then 
+		pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
+	fi
 	
 	local srcDir=""
 	local srcPath="package fs boot board"
