@@ -23,4 +23,9 @@ config BR2_PACKAGE_NCURSES_TARGET_PROGS
 	help
 	  Include ncurses programs in target (clear, reset, tput, ...)
 
+config BR2_PACKAGE_NCURSES_WITH_TERMLIB
+	bool "build with termlib"
+	help
+	  enable --with-termlib configuration	
+
 endif

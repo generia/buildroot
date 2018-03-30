@@ -29,6 +29,10 @@ NCURSES_CONF_OPTS = \
 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
 	--without-manpages
 
+ifeq ($(BR2_PACKAGE_NCURSES_WITH_TERMLIB),y)
+NCURSES_CONF_OPTS += --with-termlib 
+endif
+
 ifeq ($(BR2_STATIC_LIBS),y)
 NCURSES_CONF_OPTS += --without-shared --with-normal
 else ifeq ($(BR2_SHARED_LIBS),y)
