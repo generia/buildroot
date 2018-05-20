@@ -111,3 +111,4 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
 endef
 
 $(eval $(generic-package))
+$(eval $(host-generic-package))
