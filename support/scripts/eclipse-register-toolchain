@@ -50,7 +50,7 @@ if test ! -e ${project_directory}/host/bin/${toolchain_prefix}gcc ; then
     exit 1
 fi
 
-TOOLCHAIN_ECLIPSE_FILE=${HOME}/.buildroot-eclipse.toolchains
+TOOLCHAIN_ECLIPSE_FILE=${BROSX_HOME}/.buildroot-eclipse.toolchains
 
 # First, we remove all lines from the ${TOOLCHAIN_ECLISPE_FILE} that
 # correspond to toolchains that no longer exist.
