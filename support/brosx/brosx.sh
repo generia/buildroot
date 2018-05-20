@@ -71,9 +71,6 @@ BROSX_sw_vers_CMD=/usr/bin/sw_vers
 # vboxguest
 BROSX_hdiutil_CMD=/usr/bin/hdiutil
 
-# apt
-BROSX_curl_CMD=/opt/local/bin/curl
-
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
@@ -252,7 +249,7 @@ function diffPackage() {
 		
 	local tarDir=$workDir/`ls $workDir`
 	
-	if [ "x$pkgVersion]" == "x" ]; then 
+	if [ "x$pkgVersion" == "x" ]; then 
 		pkgVersion=`echo $tarName | sed "s/\(.*\)[\.-_]src\(\..*\)/\1\2/" | sed "s/.*-\([^-]*\)\.tar\..*/\1/" | sed "s/v//"`
 	fi
 	local outDir=$brHome/output/build/$outName-$pkgVersion

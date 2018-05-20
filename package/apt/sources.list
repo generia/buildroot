@@ -1,0 +1,29 @@
+#deb http://deb.debian.org/debian stretch main
+#deb-src http://deb.debian.org/debian stretch main
+
+#deb http://deb.debian.org/debian stretch-updates main
+#deb-src http://deb.debian.org/debian stretch-updates main
+
+#deb http://security.debian.org/debian-security/ stretch/updates main
+#deb-src http://security.debian.org/debian-security/ stretch/updates main
+
+#------------------------------------------------------------------------------#
+#                            OFFICIAL UBUNTU REPOS                             #
+#------------------------------------------------------------------------------#
+## generated via https://repogen.simplylinux.ch/
+
+###### Ubuntu Main Repos
+#deb http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
+#deb-src http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse 
+deb http://de.archive.ubuntu.com/ubuntu/ bionic main 
+deb-src http://de.archive.ubuntu.com/ubuntu/ bionic main 
+
+###### Ubuntu Update Repos
+#deb http://de.archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+#deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+#deb http://de.archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+#deb http://de.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
+#deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-security main restricted universe multiverse 
+#deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse 
+#deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-proposed main restricted universe multiverse 
+#deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse 
