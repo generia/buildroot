@@ -122,6 +122,28 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
 			headers_install)
 endef
 
+define LINUX_HEADERS_INSTALL_TARGET_CMDS
+	(cd $(LINUX_SRCDIR); find \( -name "Makefile*" -o -name "Kconfig*" -o -name "Kbuild*" \) \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 644 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_SRCDIR); find \( -name "*.h" -o -name "*.tbl" \) \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 644 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_SRCDIR); find -name "*.sh" \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 755 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_SRCDIR); cp -R scripts $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build)
+	(cd $(LINUX_SRCDIR); cp .config $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build)
+	mkdir -p $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/generated
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/generated/*.h \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/generated	
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/config/auto.conf \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/config/auto.conf	
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/config/kernel.release \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/config/kernel.release	
+endef
+LINUX_HEADERS_POST_INSTALL_HOOKS += LINUX_HEADERS_INSTALL_TARGET_CMDS
+
 ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
 define LINUX_HEADERS_CHECK_VERSION
 	$(call check_kernel_headers_version,\
