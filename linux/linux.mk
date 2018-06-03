@@ -96,7 +96,7 @@ endif
 
 LINUX_MAKE_FLAGS = \
 	HOSTCC="$(HOSTCC)" \
-	HOSTCFLAGS="$(HOSTCFLAGS) $(BROSX_HOSTCFLAGS)" \
+	HOSTCFLAGS="$(HOSTCFLAGS)" \
 	ARCH=$(KERNEL_ARCH) \
 	INSTALL_MOD_PATH=$(TARGET_DIR) \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
@@ -329,7 +329,7 @@ endef
 ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
 ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
 define LINUX_BUILD_DTB
-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) HOSTCFLAGS="$(BROSX_HOSTCFLAGS)" -C $(@D) $(KERNEL_DTBS)
 endef
 ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),)
 define LINUX_INSTALL_DTB
@@ -379,9 +379,9 @@ define LINUX_BUILD_CMDS
 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
 		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) include/generated/autoconf.h
-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) HOSTCFLAGS="$(BROSX_HOSTCFLAGS)" -C $(@D) $(LINUX_TARGET_NAME)
 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
-		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) HOSTCFLAGS="$(BROSX_HOSTCFLAGS)" -C $(@D) modules ;	\
 	fi
 	$(LINUX_BUILD_DTB)
 	$(LINUX_APPEND_DTB)
@@ -409,6 +409,30 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
 endef
 endif
 
+
+ifeq ($(BR2_LINUX_KERNEL_HEADERS_INSTALL_TARGET),y)
+define LINUX_INSTALL_KERNEL_HEADERS_TO_TARGET
+	(cd $(LINUX_DIR); find \( -name "Makefile*" -o -name "Kconfig*" -o -name "Kbuild*" \) \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 644 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_DIR); find \( -name "*.h" -o -name "*.tbl" \) \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 644 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_DIR); find -name "*.sh" \
+		| sed "s/^.\///" | xargs -I {} $(INSTALL) -D -m 755 {} \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/{})
+	(cd $(LINUX_DIR); cp -R scripts $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build)
+	(cd $(LINUX_DIR); cp .config $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build)
+	mkdir -p $(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/generated
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/generated/*.h \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/generated	
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/config/auto.conf \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/config/auto.conf	
+	$(INSTALL) -D -m 644 $(LINUX_SRCDIR)include/config/kernel.release \
+		$(TARGET_DIR)/lib/modules/$(LINUX_HEADERS_VERSION)/build/include/config/kernel.release	
+endef
+endif
+
 define LINUX_INSTALL_HOST_TOOLS
 	# Installing dtc (device tree compiler) as host tool, if selected
 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then	\
@@ -431,6 +455,7 @@ endif
 
 define LINUX_INSTALL_TARGET_CMDS
 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+	$(LINUX_INSTALL_KERNEL_HEADERS_TO_TARGET)
 	# Install modules and remove symbolic links pointing to build
 	# directories, not relevant on the target
 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
