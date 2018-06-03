@@ -135,7 +135,7 @@ The build shell environment is now ready to use.
 
 # Build System Image
 
-The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.10.16 with some extensions for iso image generation and some simple target tools, like file or htop. See [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) diagram below for involved packages.
+The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.14.10 with some extensions for iso image generation and some simple target tools, like file or htop. See [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) diagram below for involved packages.
 	 ![Busybox Iso Graph Depends](support/brosx/configs/brosx_busybox_iso_defconfig-graph-depends.png)
 
 The test build can be reproduced with the defconfig
