@@ -1,0 +1,22 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "libsepol-2.7.tar.gz" "libsepol" "libsepol" "disable-darwin-host-check" "\
+        src/Makefile \
+    ";
+
+
+===============================================================================
+--- a/src/Makefile	2017-08-04 15:31:00.000000000 +0200
++++ b/src/Makefile	2018-06-08 12:07:46.000000000 +0200
+@@ -34,7 +34,7 @@
+ 
+ LN=ln
+ OS := $(shell uname)
+-ifeq ($(OS), Darwin)
++ifeq ($(OS), Darwin-off)
+ LD_SONAME_FLAGS=-install_name,$(LIBSO)
+ LDFLAGS += -undefined dynamic_lookup

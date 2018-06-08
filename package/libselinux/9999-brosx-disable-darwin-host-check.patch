@@ -1,0 +1,36 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "libselinux-2.7.tar.gz" "libselinux" "libselinux" "disable-darwin-host-check" "\
+        src/Makefile \
+        utils/Makefile \
+    ";
+
+
+===============================================================================
+--- a/src/Makefile	2017-08-04 15:31:00.000000000 +0200
++++ b/src/Makefile	2018-06-08 12:16:05.000000000 +0200
+@@ -86,7 +86,7 @@
+ 
+ LD_SONAME_FLAGS=-soname,$(LIBSO),-z,defs,-z,relro
+ 
+-ifeq ($(OS), Darwin)
++ifeq ($(OS), Darwin-off)
+ override CFLAGS += -I/opt/local/include
+ override LDFLAGS += -L/opt/local/lib -undefined dynamic_lookup
+ LD_SONAME_FLAGS=-install_name,$(LIBSO)
+===============================================================================
+--- a/utils/Makefile	2017-08-04 15:31:00.000000000 +0200
++++ b/utils/Makefile	2018-06-08 12:21:39.000000000 +0200
+@@ -40,7 +40,7 @@
+ 
+ LD_SONAME_FLAGS=-soname,$(LIBSO),-z,defs,-z,relro
+ 
+-ifeq ($(OS), Darwin)
++ifeq ($(OS), Darwin-off)
+ override CFLAGS += -I/opt/local/include -I../../libsepol/include
+ override LDFLAGS += -L../../libsepol/src -undefined dynamic_lookup
+ endif
