@@ -2,8 +2,8 @@ Buidroot OSX - Use Buildroot on OSX natively.
 
 # About Buildroot OSX (brosx)
 
-With Buildroot OSX you can run a [Buildroot environmet](https://buildroot.org/) natively on your Apple OSX system.
-You can have a cross compile environment directly on your Mac without beeing forced to wrap a Linux system first into a virtual machine.
+With Buildroot OSX you can run a [Buildroot environment](https://buildroot.org/) natively on your Apple OSX system.
+You can have a cross compile environment directly on your Mac without being forced to wrap a Linux system first into a virtual machine.
 There is not need to setup up a Linux container like Valgrind, Docker or VirtualBox. You can simply use your Mac development tools and file system as they are.
 
  This is achieved by 
@@ -18,7 +18,7 @@ There is not need to setup up a Linux container like Valgrind, Docker or Virtual
 
 ## Install required tools
 
-The Buildroot make system expects some basic tools to be available as described in the ["Mandatoy packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
+The Buildroot make system expects some basic tools to be available as described in the ["Mandatory packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
 
 We need the following tools:
 - autoconf
