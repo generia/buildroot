@@ -18,7 +18,7 @@ There is not need to setup up a Linux container like Valgrind, Docker or Virtual
 
 ## Install required tools
 
-The Buildroot make system expects some basic tools to be available as described in the ["Mandatoy packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
+The Buildroot make system expects some basic tools to be available as described in the ["Mandatory packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
 
 We need the following tools:
 - autoconf
