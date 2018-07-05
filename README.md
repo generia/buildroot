@@ -2,9 +2,9 @@ Buidroot OSX - Use Buildroot on OSX natively.
 
 # About Buildroot OSX (brosx)
 
-With Buildroot OSX you can run a [Buildroot environmet](https://buildroot.org/) natively on your Apple OSX system.
-You can have a cross compile environment directly on your Mac without beeing forced to wrap a Linux system first into a virtual machine.
-There is not need to setup up a Linux container like Valgrind, Docker or VirtualBox. You can simply use your Mac development tools and file system as they are.
+With Buildroot OSX you can run a [Buildroot environment](https://buildroot.org/) natively on your Apple OSX system.
+You can have a cross compile environment directly on your Mac without being forced to wrap a Linux system first into a virtual machine.
+There is no need to setup up a Linux container like Valgrind, Docker or VirtualBox. You can simply use your Mac development tools and file system as they are.
 
  This is achieved by 
  - preparing a clean build environment in a shell
@@ -18,7 +18,7 @@ There is not need to setup up a Linux container like Valgrind, Docker or Virtual
 
 ## Install required tools
 
-The Buildroot make system expects some basic tools to be available as described in the ["Mandatoy packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
+The Buildroot make system expects some basic tools to be available as described in the ["Mandatory packages"](https://buildroot.org/downloads/manual/manual.html#requirement-mandatory) section of the Buildroot "System Requirements". 
 
 We need the following tools:
 - autoconf
@@ -69,14 +69,14 @@ Since the Linux build requires a case sensitive file system, the native "Mac OS 
 	hdiutil create -size 20g -type SPARSE -fs "Case-sensitive HFS+" -volname brosx brosx.sparseimage
 	hdiutil attach brosx.sparseimage
 	
-In the build environemt we use the following directory structure. The names in braces refer to envirnment variables used in this guide.
+In the build environemt we use the following directory structure. The names in braces refer to environment variables used in this guide.
 	
 	/Volumes/brosx        # mounted image root (BROSX_ROOT)
 	├── buildroot         # home folder with buildroot git project is checked out (BROSX_HOME)
 	└── toolchain         # links to the Xcode toolchain wrapper (BROSX_TOOLCHAIN)
 	└── tools             # links to binaries of other required tools (BROSX_TOOLS)
 
-After mounting the file system, we can enter the build root folder and clone the Buildroot OSX repository and checkout desired branch, e.g.
+After mounting the file system, we can enter the build root folder and clone the Buildroot OSX repository and checkout our desired branch, e.g.
 	
 	cd /Volumes/brosx
 	git clone git@github.com:generia/buildroot.git
@@ -87,12 +87,12 @@ After mounting the file system, we can enter the build root folder and clone the
 ### Create Clean Shell Environment
 
 Configure the build tools as they are installed on your Mac. There is a template at [`support/brosx/brosx.sh`](https://github.com/generia/buildroot/blob/osx10/support/brosx/brosx.sh) in the repository that helps to setup the environent. 
-The configuration shown in that template was actually used to run the Busibox build.
+The configuration shown in that template was actually used to run the Busybox build.
 
 	cp /Volumes/brosx/buildroot/support/brosx/brosx.sh /Volumes/brosx
 
 The shell setup template is split into three parts. The first part defines basic folder variables. The second defines all variables that refer to the necessary tools installed on your Mac. 
-These tools have been installed as described before. The second part contains some helper logic that configures the PATH and sets up links that the tools can be found properly.
+These tools have been installed as described before. The second part contains some helper logic that configures the PATH and sets up links so that the tools can be found properly.
 
 The basic folder variables are
 	
@@ -111,8 +111,8 @@ The tool variables follow four certain patterns that are used by the setup logic
 1. The first pattern defines single executables that reside somewhere on your Mac. The setup logic will create a link to each of them under `BROSX_TOOLS`.
 2. The second pattern defines a folder that contains only executables forming a tool-set. The setup logic will add this folder to the `PATH`.
 3. The third pattern defines a folder that contains gnu-tools that are installed with a "g" prefix. Since this is convention is not used in a Linux envirnment we strip the "g" prefix and link the base tool name in a folder under `$BROSX_ROOT/opt/<tool-set>/bin`. The tool-set folder with those links will be added to the `PATH`.   
-4. The forth pattern configures the toolchain wrapper that is used to filter the calls to the Xcode toolchain. The setup logic links all tool to a single [`toolchain-wrapper-xcode.sh`](https://github.com/generia/buildroot/blob/osx10/support/brosx/toolchain-wrapper-xcode.sh). 
-This wrapper determines the link target via the variable value. Before calling the actual compiler tool the arguments are parsed to filter out arguments not known to Xcode.
+4. The fourth pattern configures the toolchain wrapper that is used to filter the calls to the Xcode toolchain. The setup logic links all tools to a single [`toolchain-wrapper-xcode.sh`](https://github.com/generia/buildroot/blob/osx10/support/brosx/toolchain-wrapper-xcode.sh). 
+This wrapper determines the link target via the variable value. Before calling the actual compiler tool the arguments are parsed, to filter out arguments which are not known to Xcode.
 
 To aid debugging the toolchain wrapper supports logging. The logging can be turned on/off by defining a log file.
 
@@ -135,7 +135,7 @@ The build shell environment is now ready to use.
 
 # Build System Image
 
-The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.14.10 with some extensions for iso image generation and some simple target tools, like file or htop. See [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) diagram below for involved packages.
+The build on OSX does not cover all packages. So far the build works for a default builtroot busybox configuration based on Linux kernel 4.14.10 with some extensions for iso image generation and some simple target tools, like file or htop. See [graph-depends](https://buildroot.org/downloads/manual/manual.html#_graphing_the_dependencies_between_packages) diagram below for the packages involved.
 	 ![Busybox Iso Graph Depends](support/brosx/configs/brosx_busybox_iso_defconfig-graph-depends.png)
 
 The test build can be reproduced with the defconfig
