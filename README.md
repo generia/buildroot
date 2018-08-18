@@ -160,3 +160,21 @@ It was tested on
 - Xcode 6.4
 
 The build takes about 35 min on 2,5 GHz Intel Core i7 with 16 GB 1600 MHz DDR3.
+
+
+# Troubleshooting
+
+For a standard GNU autotool or cmake build things are working fairly reliable. Issues came into play, if the package at hand is "aware" of an Apple build environment. Since the build runs natively the `uname` of your build system still reports some "darwin" system. This leads usally to build failures, since the target system is actually linux but the build may be misled to some OSX/BSD Unix environment.
+
+To resolve this, the parts that detect the build system has to be spotted and it has to be checked, if the build process can be forced to assume a specific build system, e. g. by setting up some make parameters.
+
+# Gallery
+
+The buildroot-osx is capable of building sysetm images that run Xorg or Wayland/Wetston.
+
+Example of Xorg using Openbox built with brosx running on VirtualBox hardware:
+	![Xorg with Openbox on VirtualBox](support/brosx/gallery/brosx-xorg-with-openbox.png)
+
+Example of Wayland/Weston built with brosx running on Android Emulator hardware:
+	![Wayland/Weston on Android Emulator](support/brosx/gallery/brosx-weston-on-android.png)
+	
