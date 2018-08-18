@@ -170,7 +170,7 @@ To resolve this, the parts that detect the build system has to be spotted and it
 
 # Gallery
 
-The buildroot-osx is capable of building sysetm images that run Xorg or Wayland/Wetston.
+Currently, buildroot-osx is capable of building sysetm images that run Xorg or Wayland/Weston.
 
 Example of Xorg using Openbox built with brosx running on VirtualBox hardware:
 	![Xorg with Openbox on VirtualBox](support/brosx/gallery/brosx-xorg-with-openbox.png)
