@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Weston startup file.
 export XDG_RUNTIME_DIR="/run/shm/wayland"
 mkdir -p "$XDG_RUNTIME_DIR"
