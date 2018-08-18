@@ -1,0 +1,25 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "libxcb-1.12.tar.bz2" "x11r7/libxcb" "libxcb" "fix-strlcpy-missing-in-glibc" "\
+        src/xcb_util.c \
+    ";
+
+
+===============================================================================
+--- a/src/xcb_util.c	2016-05-09 18:10:55.000000000 +0200
++++ b/src/xcb_util.c	2018-08-18 10:13:34.000000000 +0200
+@@ -97,7 +97,9 @@
+     char path[PATH_MAX];
+     int _screen = 0;
+ 
+-    strlcpy(path, name, sizeof(path));
++    // BROSX patched
++    // strlcpy(path, name, sizeof(path));
++    memcpy(path, name, sizeof(path));
+     if (0 != stat(path, &sbuf)) {
+         char *dot = strrchr(path, '.');
+         if (!dot)
