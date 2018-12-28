@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TVHEADEND_VERSION = a234e2ff6d140e6ffceb7057bf18a8fdd927a5ac
+TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
 TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
 TVHEADEND_LICENSE = GPL-3.0+
 TVHEADEND_LICENSE_FILES = LICENSE.md
@@ -65,9 +65,9 @@ endif
 
 ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
 TVHEADEND_DEPENDENCIES += libdvbcsa
-TVHEADEND_CONF_OPTS += --enable-dvbcsa
+TVHEADEND_CONF_OPTS += --enable-tvhcsa
 else
-TVHEADEND_CONF_OPTS += --disable-dvbcsa
+TVHEADEND_CONF_OPTS += --disable-tvhcsa
 endif
 
 ifeq ($(BR2_PACKAGE_LIBHDHOMERUN),y)
@@ -114,7 +114,7 @@ define TVHEADEND_CONFIGURE_CMDS
 		./configure \
 			--prefix=/usr \
 			--arch="$(ARCH)" \
-			--cpu="$(BR2_GCC_TARGET_CPU)" \
+			--cpu="$(GCC_TARGET_CPU)" \
 			--nowerror \
 			--python="$(HOST_DIR)/bin/python" \
 			--enable-dvbscan \

@@ -4,12 +4,13 @@
 #
 ################################################################################
 
-WINE_VERSION = 2.0.3
+WINE_VERSION = 3.0.3
 WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
-WINE_SITE = https://dl.winehq.org/wine/source/2.0
+WINE_SITE = https://dl.winehq.org/wine/source/3.0
 WINE_LICENSE = LGPL-2.1+
 WINE_LICENSE_FILES = COPYING.LIB LICENSE
 WINE_DEPENDENCIES = host-bison host-flex host-wine
+HOST_WINE_DEPENDENCIES = host-bison host-flex
 
 # Wine needs its own directory structure and tools for cross compiling
 WINE_CONF_OPTS = \
@@ -118,6 +119,13 @@ WINE_CONF_OPTS += --with-glu
 WINE_DEPENDENCIES += libglu
 else
 WINE_CONF_OPTS += --without-glu
+endif
+
+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+WINE_CONF_OPTS += --with-krb5
+WINE_DEPENDENCIES += libkrb5
+else
+WINE_CONF_OPTS += --without-krb5
 endif
 
 ifeq ($(BR2_PACKAGE_LIBPCAP),y)
@@ -347,6 +355,7 @@ HOST_WINE_CONF_OPTS += \
 	--without-gstreamer \
 	--without-hal \
 	--without-jpeg \
+	--without-krb5 \
 	--without-ldap \
 	--without-mpg123 \
 	--without-netapi \

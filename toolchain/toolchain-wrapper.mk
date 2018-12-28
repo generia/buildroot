@@ -1,4 +1,8 @@
-# This file contains the definition of the toolchain wrapper build commands
+################################################################################
+#
+# definition of the toolchain wrapper build commands
+#
+################################################################################
 
 # We use --hash-style=both to increase the compatibility of the generated
 # binary with older platforms, except for MIPS, where the only acceptable
@@ -28,11 +32,31 @@ endif
 
 # Avoid FPU bug on XBurst CPUs
 ifeq ($(BR2_mips_xburst),y)
+# Before gcc 4.6, -mno-fused-madd was needed, after -ffp-contract is
+# needed
+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
+else
 TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
+endif
 endif
 
 ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
 TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+endif
+
+ifeq ($(BR2_RELRO_PARTIAL),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
+else ifeq ($(BR2_RELRO_FULL),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
+endif
+
+ifeq ($(BR2_SSP_REGULAR),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_REGULAR
+else ifeq ($(BR2_SSP_STRONG),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_STRONG
+else ifeq ($(BR2_SSP_ALL),y)
+TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
 endif
 
 define TOOLCHAIN_WRAPPER_BUILD

@@ -1,3 +1,5 @@
-# md5 from https://pypi.python.org/pypi/txaio/json, sha256 locally computed.
-md5	643ac20b895b878786cd6a46790367d0  txaio-2.8.0.tar.gz
-sha256	8029d956591107ff9a2221d2a288fdd3718713a6991f59b97359d3d4f4b7b564  txaio-2.8.0.tar.gz
+# md5, sha256 from https://pypi.org/pypi/txaio/json
+md5	ecdd4d0f401c7f01f22830b4d2788593  txaio-18.8.1.tar.gz
+sha256	67e360ac73b12c52058219bb5f8b3ed4105d2636707a36a7cdafb56fe06db7fe  txaio-18.8.1.tar.gz
+# Locally computed sha256 checksums
+sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE

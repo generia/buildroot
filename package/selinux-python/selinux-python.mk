@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-SELINUX_PYTHON_VERSION = 2.7
-SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+SELINUX_PYTHON_VERSION = 2.8
+SELINUX_PYTHON_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
 SELINUX_PYTHON_LICENSE = GPL-2.0
 SELINUX_PYTHON_LICENSE_FILES = COPYING
 
@@ -36,7 +36,7 @@ endif
 define SELINUX_PYTHON_BUILD_CMDS
 	$(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
 		$(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
-			DESTDIR=$(STAGING_DIR) all
+			all
 	)
 endef
 

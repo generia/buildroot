@@ -1,10 +1,12 @@
 comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
+	depends on !BR2_microblazeel
 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 
 config BR2_PACKAGE_TVHEADEND
 	bool "tvheadend"
+	depends on !BR2_microblazeel # assertion failure in binutils
 	depends on !BR2_STATIC_LIBS # dladdr()
 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
@@ -35,7 +37,7 @@ config BR2_PACKAGE_TVHEADEND_TRANSCODING
 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
 	select BR2_PACKAGE_FFMPEG_GPL # needed for x264 support
 	select BR2_PACKAGE_FFMPEG_SWSCALE
-	select BR2_PACKAGE_LIBVPX if !BR2_bfin # libvpx
+	select BR2_PACKAGE_LIBVPX
 	select BR2_PACKAGE_X264
 	help
 	  Enable transcoding support.

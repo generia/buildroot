@@ -264,6 +264,10 @@ yourself to the DEVELOPERS file. This should be done in the same patch
 creating or modifying the package. See xref:DEVELOPERS[the DEVELOPERS file]
 for more information.
 
+Buildroot provides a handy tool to check for common coding style
+mistakes on files you created or modified, called +check-package+ (see
+xref:check-package[] for more information).
+
 ==== Preparing a patch series
 
 Starting from the changes committed in your local git view, _rebase_
@@ -302,6 +306,28 @@ Use the output of +get-developers+ to send your patches:
 
 ---------------------
 $ git send-email --to buildroot@buildroot.org --cc bob --cc alice outgoing/*
+---------------------
+
+Alternatively, +get-developers -e+ can be used directly with the
++--cc-cmd+ argument to +git send-email+ to automatically CC the
+affected developers:
+
+---------------------
+$ git send-email --to buildroot@buildroot.org \
+      --cc-cmd './utils/get-developers -e' origin/master
+---------------------
+
++git+ can be configured to automatically do this out of the box with:
+
+---------------------
+$ git config sendemail.to buildroot@buildroot.org
+$ git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
+---------------------
+
+And then just do:
+
+---------------------
+$ git send-email origin/master
 ---------------------
 
 Note that +git+ should be configured to use your mail account.

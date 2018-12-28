@@ -1,6 +1,6 @@
-# From http://www.sqlite.org/download.html
-sha1 f56fe3407d8297fc0a68a058f4c9e6b77e83575c  sqlite-autoconf-3210000.tar.gz
+# From https://www.sqlite.org/download.html
+sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
 # Calculated based on the hash above
-sha256 d7dd516775005ad87a57f428b6f86afd206cb341722927f104d3f0cf65fbbbe3  sqlite-autoconf-3210000.tar.gz
+sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
 # Locally calculated
 sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
