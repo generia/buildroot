@@ -36,6 +36,4 @@ define HOST_LIBBROSX_INSTALL_CMDS
 	ln -s -f $(HOST_LIBBROSX_LIB_INSTALL) $(HOST_LIBBROSX_LIB_INSTALL_NO_VERSION)	
 endef
 
-DEPENDENCIES_HOST_PREREQ += host-libbrosx
-
 $(eval $(host-generic-package))

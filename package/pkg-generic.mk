@@ -496,7 +496,8 @@ ifndef $(2)_PATCH
 endif
 
 $(2)_ALL_DOWNLOADS = \
-	$$(foreach p,$$($(2)_SOURCE_SPEC) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
 		$$(if $$(findstring ://,$$(p)),$$(p),\
 			$$($(2)_SITE)/$$(p)))
 
@@ -578,33 +579,33 @@ endif
 endif
 
 ifneq ($(1),host-skeleton)
-$(2)_DEPENDENCIES += host-skeleton
+$(2)_DEPENDENCIES += host-skeleton host-libbrosx
 endif
 
 ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
 $(2)_DOWNLOAD_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
 endif
 
-ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+ifeq ($$(filter host-tar host-skeleton host-libbrosx host-fakedate,$(1)),)
 $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
 endif
 
-ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+ifeq ($$(filter host-tar host-skeleton host-libbrosx host-xz host-lzip host-fakedate,$(1)),)
 $(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
 endif
 
-ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+ifeq ($$(filter host-tar host-skeleton host-libbrosx host-xz host-lzip host-fakedate,$(1)),)
 $(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
 endif
 
 ifeq ($$(BR2_CCACHE),y)
-ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
+ifeq ($$(filter host-tar host-skeleton host-libbrosx host-xz host-lzip host-fakedate host-ccache,$(1)),)
 $(2)_DEPENDENCIES += host-ccache
 endif
 endif
 
 ifeq ($$(BR2_REPRODUCIBLE),y)
-ifeq ($$(filter host-skeleton host-fakedate,$(1)),)
+ifeq ($$(filter host-skeleton host-libbrosx host-fakedate,$(1)),)
 $(2)_DEPENDENCIES += host-fakedate
 endif
 endif

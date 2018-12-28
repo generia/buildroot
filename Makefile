@@ -509,7 +509,6 @@ include package/Makefile.in
 # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
 include arch/arch.mk
 include support/dependencies/dependencies.mk
-include support/brosx/libbrosx/libbrosx.mk
 
 include $(sort $(wildcard toolchain/*.mk))
 include $(sort $(wildcard toolchain/*/*.mk))
@@ -529,6 +528,7 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
 -include $(PACKAGE_OVERRIDE_FILE)
 endif
 
+include support/brosx/libbrosx/libbrosx.mk
 include $(sort $(wildcard package/*/*.mk))
 
 include boot/common.mk
