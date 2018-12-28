@@ -36,6 +36,7 @@ We need the following tools:
 - egrep
 - file
 - findutils
+- flock (for OSX, see https://github.com/discoteq/flock)
 - getopt
 - getconf
 - git
@@ -170,7 +171,7 @@ To resolve this, the parts that detect the build system has to be spotted and it
 
 # Gallery
 
-Currently, buildroot-osx is capable of building sysetm images that run Xorg or Wayland/Weston.
+Currently, buildroot-osx is capable of building system images that run Xorg or Wayland/Weston.
 
 Example of Xorg using Openbox built with brosx running on VirtualBox hardware:
 	![Xorg with Openbox on VirtualBox](support/brosx/gallery/brosx-xorg-with-openbox.png)

@@ -71,6 +71,9 @@ BROSX_sw_vers_CMD=/usr/bin/sw_vers
 # vboxguest
 BROSX_hdiutil_CMD=/usr/bin/hdiutil
 
+# flock
+BROSX_flock_CMD=/usr/local/bin/flock
+
 # host toolchain
 BROSX_TOOLCHAIN_CMD_cc=/usr/bin/cc
 BROSX_TOOLCHAIN_CMD_gcc=/usr/bin/gcc
