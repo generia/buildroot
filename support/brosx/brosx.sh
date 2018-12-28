@@ -118,7 +118,7 @@ cmdHGhomes=""
 cmdToolchain=""
 
 for var in ${!BROSX_*}; do 
-	name=`echo $var | sed "s/BROSX_\(.*\)_.*$/\1/"`
+	name=`echo $var | sed "s/BROSX_\([^_]*\)_.*$/\1/"`
 	if [ $name == TOOLCHAIN ]; then
 		tool=`echo $var | sed "s/BROSX_\([^_]*\)_CMD_\([^_]*\)/\2/"`
 		if [ "x$tool" != "x$var" ]; then	
