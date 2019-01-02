@@ -31,5 +31,8 @@ void brosx_set_program_invocation_name(char *program_name);
 */
 //#endif
 
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
 
 #endif
