@@ -1,0 +1,278 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "attr-2.4.48.tar.gz" "attr" "host-attr" "wrap-xattr-calls" "\
+        ./libattr/attr_copy_fd.c \
+        ./libattr/attr_copy_file.c \
+        ./libattr/libattr.c \
+        ./libattr/syscalls.c \
+        ./tools/getfattr.c \
+        ./tools/setfattr.c \
+    ";
+
+
+===============================================================================
+--- a/./libattr/attr_copy_fd.c	2016-12-09 20:44:28.000000000 +0100
++++ b/./libattr/attr_copy_fd.c	2019-01-02 02:24:35.000000000 +0100
+@@ -73,7 +73,7 @@
+ 	if (check == NULL)
+ 		check = attr_copy_check_permissions;
+ 
+-	size = flistxattr (src_fd, NULL, 0);
++	size = _flistxattr (src_fd, NULL, 0);
+ 	if (size < 0) {
+ 		if (errno != ENOSYS && errno != ENOTSUP) {
+ 			const char *qpath = quote (ctx, src_path);
+@@ -89,7 +89,7 @@
+ 		ret = -1;
+ 		goto getout;
+ 	}
+-	size = flistxattr (src_fd, names, size);
++	size = _flistxattr (src_fd, names, size);
+ 	if (size < 0) {
+ 		const char *qpath = quote (ctx, src_path);
+ 		error (ctx, _("listing attributes of %s"), qpath);
+@@ -108,7 +108,7 @@
+ 		if (!*name || !check(name, ctx))
+ 			continue;
+ 
+-		size = fgetxattr (src_fd, name, NULL, 0);
++		size = _fgetxattr (src_fd, name, NULL, 0);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -125,7 +125,7 @@
+ 			error (ctx, "");
+ 			ret = -1;
+ 		}
+-		size = fgetxattr (src_fd, name, value, size);
++		size = _fgetxattr (src_fd, name, value, size);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -136,7 +136,7 @@
+ 			ret = -1;
+ 			continue;
+ 		}
+-		if (fsetxattr (dst_fd, name, value, size, 0) != 0) {
++		if (_fsetxattr (dst_fd, name, value, size, 0) != 0) {
+ 			if (errno == ENOTSUP)
+ 				setxattr_ENOTSUP++;
+ 			else {
+===============================================================================
+--- a/./libattr/attr_copy_file.c	2016-12-09 20:43:35.000000000 +0100
++++ b/./libattr/attr_copy_file.c	2019-01-02 02:24:35.000000000 +0100
+@@ -71,7 +71,7 @@
+ 	if (check == NULL)
+ 		check = attr_copy_check_permissions;
+ 
+-	size = llistxattr (src_path, NULL, 0);
++	size = _llistxattr (src_path, NULL, 0);
+ 	if (size < 0) {
+ 		if (errno != ENOSYS && errno != ENOTSUP) {
+ 			const char *qpath = quote (ctx, src_path);
+@@ -87,7 +87,7 @@
+ 		ret = -1;
+ 		goto getout;
+ 	}
+-	size = llistxattr (src_path, names, size);
++	size = _llistxattr (src_path, names, size);
+ 	if (size < 0) {
+ 		const char *qpath = quote (ctx, src_path);
+ 		error (ctx, _("listing attributes of %s"), qpath);
+@@ -106,7 +106,7 @@
+ 		if (!*name || !check(name, ctx))
+ 			continue;
+ 
+-		size = lgetxattr (src_path, name, NULL, 0);
++		size = _lgetxattr (src_path, name, NULL, 0);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -123,7 +123,7 @@
+ 			error (ctx, "");
+ 			ret = -1;
+ 		}
+-		size = lgetxattr (src_path, name, value, size);
++		size = _lgetxattr (src_path, name, value, size);
+ 		if (size < 0) {
+ 			const char *qpath = quote (ctx, src_path);
+ 			const char *qname = quote (ctx, name);
+@@ -134,7 +134,7 @@
+ 			ret = -1;
+ 			continue;
+ 		}
+-		if (lsetxattr (dst_path, name, value, size, 0) != 0) {
++		if (_lsetxattr (dst_path, name, value, size, 0) != 0) {
+ 			if (errno == ENOTSUP)
+ 				setxattr_ENOTSUP++;
+ 			else {
+===============================================================================
+--- a/./libattr/libattr.c	2016-12-09 20:10:41.000000000 +0100
++++ b/./libattr/libattr.c	2019-01-02 16:54:10.000000000 +0100
+@@ -111,7 +111,7 @@
+ 	 int *valuelength, int flags)
+ {
+ 	ssize_t (*get)(const char *, const char *, void *, size_t) =
+-		flags & ATTR_DONTFOLLOW ? lgetxattr : getxattr;
++		flags & ATTR_DONTFOLLOW ? _lgetxattr : _getxattr;
+ 	int c, compat;
+ 	char name[MAXNAMELEN+16];
+ 
+@@ -147,13 +147,13 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fgetxattr(fd, name, attrvalue, *valuelength);
++		c = _fgetxattr(fd, name, attrvalue, *valuelength);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+ 	}
+ 	if (c < 0 && errno == ERANGE) {
+-		int size = fgetxattr(fd, name, NULL, 0);
++		int size = _fgetxattr(fd, name, NULL, 0);
+ 		if (size >= 0) {
+ 			*valuelength = size;
+ 			errno = E2BIG;
+@@ -183,9 +183,9 @@
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+ 		if (flags & ATTR_DONTFOLLOW)
+-			c = lsetxattr(path, name, buffer, valuelength, lflags);
++			c = _lsetxattr(path, name, buffer, valuelength, lflags);
+ 		else
+-			c = setxattr(path, name, buffer, valuelength, lflags);
++			c = _setxattr(path, name, buffer, valuelength, lflags);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -209,7 +209,7 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fsetxattr(fd, name, buffer, valuelength, lflags);
++		c = _fsetxattr(fd, name, buffer, valuelength, lflags);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -227,9 +227,9 @@
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+ 		if (flags & ATTR_DONTFOLLOW)
+-			c = lremovexattr(path, name);
++			c = _lremovexattr(path, name);
+ 		else
+-			c = removexattr(path, name);
++			c = _removexattr(path, name);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -246,7 +246,7 @@
+ 	for (compat = 0; compat < 2; compat++) {
+ 		if ((c = api_convert(name, attrname, flags, compat)) < 0)
+ 			return c;
+-		c = fremovexattr(fd, name);
++		c = _fremovexattr(fd, name);
+ 		if (c < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		break;
+@@ -301,9 +301,9 @@
+ 	bzero(buffer, sizeof(attrlist_t));
+ 
+ 	if (flags & ATTR_DONTFOLLOW)
+-		length = llistxattr(path, lbuf, sizeof(lbuf));
++		length = _llistxattr(path, lbuf, sizeof(lbuf));
+ 	else
+-		length = listxattr(path, lbuf, sizeof(lbuf));
++		length = _listxattr(path, lbuf, sizeof(lbuf));
+ 	if (length <= 0)
+ 		return length;
+ 
+@@ -314,9 +314,9 @@
+ 		if (api_unconvert(name, l, flags))
+ 			continue;
+ 		if (flags & ATTR_DONTFOLLOW)
+-			vlength = lgetxattr(path, l, NULL, 0);
++			vlength = _lgetxattr(path, l, NULL, 0);
+ 		else
+-			vlength =  getxattr(path, l, NULL, 0);
++			vlength =  _getxattr(path, l, NULL, 0);
+ 		if (vlength < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		if (count++ < cursor->opaque[0])
+@@ -350,7 +350,7 @@
+ 	}
+ 	bzero(buffer, sizeof(attrlist_t));
+ 
+-	length = flistxattr(fd, lbuf, sizeof(lbuf));
++	length = _flistxattr(fd, lbuf, sizeof(lbuf));
+ 	if (length < 0)
+ 		return length;
+ 
+@@ -360,7 +360,7 @@
+ 	for (l = lbuf; l != lbuf + length; l = strchr(l, '\0') + 1) {
+ 		if (api_unconvert(name, l, flags))
+ 			continue;
+-		vlength = fgetxattr(fd, l, NULL, 0);
++		vlength = _fgetxattr(fd, l, NULL, 0);
+ 		if (vlength < 0 && (errno == ENOATTR || errno == ENOTSUP))
+ 			continue;
+ 		if (count++ < cursor->opaque[0])
+===============================================================================
+--- a/./libattr/syscalls.c	2016-12-09 20:10:41.000000000 +0100
++++ b/./libattr/syscalls.c	2019-01-02 17:13:56.000000000 +0100
+@@ -23,7 +23,7 @@
+ #include "config.h"
+ 
+ #include <sys/xattr.h>
+-
++/*
+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
+ # pragma GCC visibility push(default)
+ #endif
+@@ -97,3 +97,4 @@
+ #ifdef HAVE_VISIBILITY_ATTRIBUTE
+ # pragma GCC visibility pop
+ #endif
++*/
+===============================================================================
+--- a/./tools/getfattr.c	2016-12-09 20:10:41.000000000 +0100
++++ b/./tools/getfattr.c	2019-01-02 02:24:35.000000000 +0100
+@@ -82,13 +82,13 @@
+ int do_getxattr(const char *path, const char *name, void *value, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		getxattr : lgetxattr)(path, name, value, size);
++		_getxattr : _lgetxattr)(path, name, value, size);
+ }
+ 
+ int do_listxattr(const char *path, char *list, size_t size)
+ {
+ 	return ((walk_flags & WALK_TREE_DEREFERENCE) ?
+-		listxattr : llistxattr)(path, list, size);
++		_listxattr : _llistxattr)(path, list, size);
+ }
+ 
+ const char *strerror_ea(int err)
+===============================================================================
+--- a/./tools/setfattr.c	2018-01-21 06:00:44.000000000 +0100
++++ b/./tools/setfattr.c	2019-01-02 02:24:33.000000000 +0100
+@@ -90,12 +90,12 @@
+ int do_setxattr(const char *path, const char *name,
+ 		const void *value, size_t size)
+ {
+-	return (opt_deref ? setxattr : lsetxattr)(path, name, value, size, 0);
++	return (opt_deref ? _setxattr : _lsetxattr)(path, name, value, size, 0);
+ }
+ 
+ int do_removexattr(const char *path, const char *name)
+ {
+-	return (opt_deref ? removexattr : lremovexattr)(path, name);
++	return (opt_deref ? _removexattr : _lremovexattr)(path, name);
+ }
+ 
+ int restore(const char *filename)
