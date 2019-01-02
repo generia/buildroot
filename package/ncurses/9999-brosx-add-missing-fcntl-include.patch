@@ -1,0 +1,22 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "ncurses-6.1.tar.gz" "ncurses" "host-ncurses" "add-missing-fcntl-include" "\
+        ncurses/trace/lib_trace.c \
+    ";
+
+
+===============================================================================
+--- a/ncurses/trace/lib_trace.c	2017-01-14 18:53:42.000000000 +0100
++++ b/ncurses/trace/lib_trace.c	2019-01-02 22:22:57.000000000 +0100
+@@ -46,6 +46,7 @@
+ #include <tic.h>
+ 
+ #include <ctype.h>
++#include <fcntl.h>
+ 
+ MODULE_ID("$Id: lib_trace.c,v 1.86 2017/01/14 17:53:42 tom Exp $")
+ 
