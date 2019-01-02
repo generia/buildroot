@@ -14,7 +14,7 @@ FAKEROOT_SITE = https://github.com/mackyle/fakeroot/archive
 
 BR_NO_CHECK_HASH_FOR += $(FAKEROOT_SOURCE)
 
-HOST_FAKEROOT_DEPENDENCIES = host-acl
+HOST_FAKEROOT_DEPENDENCIES = host-acl host-m4
 
 define HOST_FAKEROOT_BOOTSTRAP_HOOK
 	@$(call MESSAGE,"Bootstrapping")
