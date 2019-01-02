@@ -41,6 +41,7 @@ define HOST_TAR_EXTRACT_CMDS
 endef
 
 HOST_TAR_CONF_OPTS = --without-selinux
+HOST_TAR_CONF_OPTS += --disable-acl
 
 # we are built before ccache
 HOST_TAR_CONF_ENV = \
