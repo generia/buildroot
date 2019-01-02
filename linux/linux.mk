@@ -115,7 +115,7 @@ LINUX_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
 endif
 
 LINUX_MAKE_FLAGS = \
-	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(BROSX_HOSTCFLAGS) $(HOST_LDFLAGS)" \
 	ARCH=$(KERNEL_ARCH) \
 	INSTALL_MOD_PATH=$(TARGET_DIR) \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
@@ -204,14 +204,19 @@ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
 LINUX_MAKE_FLAGS += LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
 endif
 
+# add linx specific includes for compiling host tools
+BROSX_HOSTCFLAGS = -include $(LINUX_DIR)/include/generated/autoconf.h
+
 # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
 # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
 # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
 # defconfig file.
 ifeq ($(KERNEL_ARCH),i386)
 LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
+BROSX_HOSTCFLAGS += -I $(LINUX_DIR)/tools/include -I $(LINUX_ARCH_PATH)/include/uapi -I $(LINUX_ARCH_PATH)/include -I $(LINUX_DIR)/include/uapi -I $(LINUX_DIR)/include
 else ifeq ($(KERNEL_ARCH),x86_64)
 LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
+BROSX_HOSTCFLAGS += -I $(LINUX_DIR)/tools/include -I $(LINUX_ARCH_PATH)/include/uapi -I $(LINUX_ARCH_PATH)/include -I $(LINUX_DIR)/include/uapi -I $(LINUX_DIR)/include
 else
 LINUX_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
 endif
@@ -236,7 +241,16 @@ define LINUX_APPLY_LOCAL_PATCHES
 	done
 endef
 
+# BROSX: workaround "REG_EMPTY - empty (sub)expression" error in BSD based regexec() call
+define LINUX_APPLY_RELOCS_REGEXP_PATCHES
+	cp $(LINUX_ARCH_PATH)/tools/relocs.c $(LINUX_ARCH_PATH)/tools/relocs.c-before-brosx-patch; \
+	if test -e $(LINUX_ARCH_PATH)/tools/relocs.c ; then \
+		sed -i "s/(|_/(\.\?\|_/" $(LINUX_ARCH_PATH)/tools/relocs.c; \
+	fi
+endef
+ 
 LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+LINUX_POST_PATCH_HOOKS += LINUX_APPLY_RELOCS_REGEXP_PATCHES
 
 # Older linux kernels use deprecated perl constructs in timeconst.pl
 # that were removed for perl 5.22+ so it breaks on newer distributions
@@ -428,7 +442,8 @@ define LINUX_BUILD_CMDS
 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
 	)
-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) include/generated/autoconf.h
+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) HOSTCFLAGS="$(BROSX_HOSTCFLAGS)" -C $(@D) $(LINUX_TARGET_NAME)
 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) HOSTCFLAGS="$(BROSX_HOSTCFLAGS)" -C $(@D) modules ;	\
 	fi
