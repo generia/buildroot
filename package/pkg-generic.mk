@@ -579,7 +579,10 @@ endif
 endif
 
 ifneq ($(1),host-skeleton)
-$(2)_DEPENDENCIES += host-skeleton host-libbrosx
+$(2)_DEPENDENCIES += host-skeleton
+ifneq ($(1),host-libbrosx)
+$(2)_DEPENDENCIES += host-libbrosx
+endif
 endif
 
 ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
