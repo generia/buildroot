@@ -1,0 +1,40 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "syslinux-6.03.tar.xz" "syslinux" "syslinux" "exclude-extlinux-from-build" "\
+        Makefile \
+    ";
+
+
+===============================================================================
+--- a/Makefile	2014-10-06 18:27:44.000000000 +0200
++++ b/Makefile	2019-01-02 23:09:36.000000000 +0100
+@@ -191,13 +191,13 @@
+ ITARGET  =
+ IOBJECTS = $(ITARGET) \
+ 	utils/gethostip utils/isohybrid utils/mkdiskimage \
+-	mtools/syslinux linux/syslinux extlinux/extlinux
+-ISUBDIRS = libinstaller mtools linux extlinux utils
++	mtools/syslinux linux/syslinux
++ISUBDIRS = libinstaller mtools linux utils
+ 
+ # Things to install in /usr/bin
+ INSTALL_BIN   =	mtools/syslinux
+ # Things to install in /sbin
+-INSTALL_SBIN  = extlinux/extlinux
++#INSTALL_SBIN  = 
+ # Things to install in /usr/lib/syslinux
+ INSTALL_AUX   =	core/pxelinux.0 gpxe/gpxelinux.0 gpxe/gpxelinuxk.0 \
+ 		core/isolinux.bin core/isolinux-debug.bin \
+@@ -330,7 +330,7 @@
+ 	mkdir -m 755 -p $(INSTALLROOT)$(BINDIR)
+ 	install -m 755 -c $(INSTALL_BIN) $(INSTALLROOT)$(BINDIR)
+ 	mkdir -m 755 -p $(INSTALLROOT)$(SBINDIR)
+-	install -m 755 -c $(INSTALL_SBIN) $(INSTALLROOT)$(SBINDIR)
++	#install -m 755 -c $(INSTALL_SBIN) $(INSTALLROOT)$(SBINDIR)
+ 	mkdir -m 755 -p $(INSTALLROOT)$(AUXDIR)
+ 	install -m 644 -c $(INSTALL_AUX) $(INSTALLROOT)$(AUXDIR)
+ 	-install -m 644 -c $(INSTALL_AUX_OPT) $(INSTALLROOT)$(AUXDIR)

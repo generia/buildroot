@@ -45,6 +45,7 @@ BROSX_tar_CMD=/usr/local/Cellar/gnu-tar/1.30/bin/gtar
 BROSX_unzip_CMD=/usr/local/Cellar/unzip/6.0_3/bin/unzip 
 BROSX_wget_CMD=/usr/local/Cellar/wget/1.16.1/bin/wget
 BROSX_which_CMD=/usr/bin/which
+BROSX_xz_CMD=/opt/local/bin/xz
 
 # convenience commands not strictly needed in the build
 BROSX_less_CMD=/usr/bin/less
