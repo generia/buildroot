@@ -94,6 +94,10 @@ BROSX_TOOLCHAIN_CMD_xcrun=/usr/bin/xcrun
 BROSX_TOOLCHAIN_CMD_Rez=/usr/bin/xcrun 
 BROSX_TOOLCHAIN_CMD_SetFile=/usr/bin/xcrun 
 
+# uname wrapper
+BROSX_uname_WRAPPER=$BROSX_HOME/support/brosx/bin/uname-wrapper.sh
+BROSX_uname_WRAPPER_DELEGATE=$BROSX_TOOLS/coreutils/bin/uname
+
 # toolchain wrapper logging
 BROSX_TOOLCHAIN_WRAPPER_LOG_DIR=$BROSX_HOME/output/build
 # leave log-file empty to turn logging off
@@ -118,6 +122,7 @@ alias ll='ls -alF'
 cmds=""
 cmdHomes=""
 cmdHGhomes=""
+cmdWrappers=""
 cmdToolchain=""
 
 for var in ${!BROSX_*}; do 
@@ -138,6 +143,9 @@ for var in ${!BROSX_*}; do
 		        ;;
 		    GHOME )
 		        cmdGhomes="$cmdGhomes $name"
+		        ;;
+		    WRAPPER )
+		        cmdWrappers="$cmdWrappers $name"
 		        ;;
 		esac
 	fi
@@ -197,6 +205,16 @@ for ghome in $cmdGhomes; do
 	BROSX_PATH=$BROSX_PATH:$dir
 done
 
+# link wrapper tools
+BROSX_WRAPPER_PATH=$BROSX_TOOLS/wrapper
+mkdir -p $BROSX_WRAPPER_PATH
+for cmd in $cmdWrappers; do
+	var=BROSX_${cmd}_WRAPPER
+	eval "cmdPath=\${$var}"
+	cmdLink=$BROSX_WRAPPER_PATH/${cmd}
+	installLink $cmdPath $cmdLink $var
+done
+
 
 # setup toolchain wrapper and link toolchain commands
 BROSX_PATH=$BROSX_TOOLCHAIN/bin:$BROSX_PATH
@@ -211,13 +229,14 @@ for tool in $cmdToolchain; do
 	installLink $BROSX_TOOLCHAIN_WRAPPER $cmdLink $var
 done
 
-PATH=$BROSX_PATH
+PATH=$BROSX_WRAPPER_PATH:$BROSX_PATH
 
+# exporting env vars
 export LC_ALL=$BROSX_LOCALE
 export LANG=$BROSX_LOCALE
 export LANGUAGE=$BROSX_LOCALE
 
-export TERM LS_COLORS PS1 M4 PATH BROSX_ROOT BROSX_HOME BROSX_TOOLS ${!BROSX_TOOLCHAIN_*}
+export TERM LS_COLORS PS1 M4 PATH BROSX_ROOT BROSX_HOME BROSX_TOOLS BROSX_uname_WRAPPER_DELEGATE ${!BROSX_TOOLCHAIN_*}
 
 #
 # patch creation helper
@@ -241,7 +260,7 @@ function diffPackage() {
 	echo "-"
 
 	local brHome=$BROSX_HOME
-	local dlDir=$brHome/dl
+	local dlDir=$brHome/dl/$pkgName
 	local tarFile=$dlDir/$tarName
 	
 	local workDir=$dlDir/.diffPackage
