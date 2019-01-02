@@ -6,6 +6,7 @@ args=( "$@" )
 
 logFile=$BROSX_TOOLCHAIN_WRAPPER_LOG_FILE
 hostDir=$BROSX_HOME/output/host
+libbrosxDir=$BROSX_HOME/support/brosx/libbrosx
 
 info() {
 	if [ "x$logFile" != "x" ]; then
@@ -111,6 +112,7 @@ fi
 if [ "$needsBrOsxCFlags" == "yes" ]; then
 	addarg "-include"
 	addarg "$hostDir/include/libbrosx.h"
+	addarg "-I$libbrosxDir/include"
 fi
 
 if [ "$needsBrOsxLdFlags" == "yes" ]; then	
