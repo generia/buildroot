@@ -156,7 +156,6 @@ else
 	fi 
 fi
 info "running 'uname $logArgs' -> '$result'"
-info "- env: '`env | sort`'"
 
 if [ $hasHelpArg == yes ]; then
 	echo "brosx-uname-wrapper:"
