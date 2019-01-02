@@ -1,0 +1,23 @@
+Patch created by brosx "diffPackage" tool
+
+usage:
+    diffPackage <tarName> <pkgName> <outName> <patchName> <files>
+
+actual:
+    diffPackage "acl-2.2.53.tar.gz" "acl" "host-acl" "remove-current-version-ld-flag" "\
+        build-aux/ltmain.sh \
+    ";
+
+
+===============================================================================
+--- a/build-aux/ltmain.sh	2018-06-19 04:17:03.000000000 +0200
++++ b/build-aux/ltmain.sh	2019-01-02 17:38:14.000000000 +0100
+@@ -8938,7 +8938,7 @@
+                   verstring="$wl-compatibility_version $wl$minor_current $wl-current_version $wl$minor_current.$revision"
+                   ;;
+               *)
+-                  verstring="-compatibility_version $minor_current -current_version $minor_current.$revision"
++                  verstring="-compatibility_version $minor_current"
+                   ;;
+           esac
+ 	  ;;

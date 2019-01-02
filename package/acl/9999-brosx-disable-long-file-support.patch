@@ -5,13 +5,13 @@ usage:
 
 actual:
     diffPackage "acl-2.2.52.src.tar.gz" "acl" "host-acl" "disable-long-file-support" "\
-        chacl/chacl.c \
+        tools/chacl.c \
     ";
 
 
 ===============================================================================
---- a/chacl/chacl.c	2013-04-30 17:20:43.000000000 +0200
-+++ b/chacl/chacl.c	2018-01-03 18:06:57.000000000 +0100
+--- a/tools/chacl.c	2013-04-30 17:20:43.000000000 +0200
++++ b/tools/chacl.c	2018-01-03 18:06:57.000000000 +0100
 @@ -32,6 +32,10 @@
  #include <locale.h>
  #include "config.h"
