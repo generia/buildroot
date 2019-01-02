@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBXCB
 	select BR2_PACKAGE_XCB_PROTO
 	select BR2_PACKAGE_XLIB_LIBXDMCP
 	select BR2_PACKAGE_XLIB_LIBXAU
+	select BR2_PACKAGE_LIBBSD
 	help
 	  The X protocol C-language Binding (XCB) is a replacement for
 	  Xlib featuring a small footprint, latency hiding, direct
